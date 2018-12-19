@@ -1,0 +1,5 @@
+osascript -e 'tell application "Terminal" to do script "python ~/Desktop/ceng435/ceng435--term-project/destination.py"'
+osascript -e 'tell application "Terminal" to do script "python ~/Desktop/ceng435/ceng435--term-project/r1.py"'
+osascript -e 'tell application "Terminal" to do script "python ~/Desktop/ceng435/ceng435--term-project/r2.py"'
+osascript -e 'tell application "Terminal" to do script "python ~/Desktop/ceng435/ceng435--term-project/broker.py"'
+osascript -e 'tell application "Terminal" to do script "python ~/Desktop/ceng435/ceng435--term-project/source.py"'
