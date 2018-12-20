@@ -22,7 +22,7 @@ i = 0
 total_time = 0
 while 1:
     # read 512 bytes from file
-    message = f.read(512)
+    message = f.read(500)
     # if end of file break
     if(len(message) == 0):
         break
@@ -31,7 +31,7 @@ while 1:
     # if message is valid
     if message:
         s.send(message) # send data
-        rcv_data = s.recv(1024) # receive destination reply from broker
+        rcv_data = s.recv(512) # receive destination reply from broker
         f_rcv_data = float(rcv_data) # convert time string to float
         current_time = time.time() # calculate current time
         total_time += current_time-f_rcv_data  # add end-to-end delay to total time.
