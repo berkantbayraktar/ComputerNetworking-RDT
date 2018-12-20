@@ -33,8 +33,8 @@ class myThread(Thread): # Thread class
     def run(self):
         if(self.PORT == 19077):  # if port number reserved for router1
             while 1:
-                # receive 1024 byte data from router1
-                self.data,self.addr = r1_udp_sock.recvfrom(1024)
+                # receive 512 byte data from router1
+                self.data,self.addr = r1_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:
                     # send received time as reply to routers
@@ -46,8 +46,8 @@ class myThread(Thread): # Thread class
                     
         else:   #if port number reserved for router2
             while 1:
-                # receive 1024 byte data from router2
-                self.data,self.addr = r2_udp_sock.recvfrom(1024)
+                # receive 512 byte data from router2
+                self.data,self.addr = r2_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:  
                     # send received time as reply to routers

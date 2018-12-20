@@ -15,14 +15,14 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST,PORT))
 
 # open file to be sent over the network
-f = open("./demofile_light.txt","r")
+f = open("./demofile.txt","r")
 
 #set counter
 i = 0
 total_time = 0
 while 1:
-    # read 1024 bytes from file
-    message = f.read(1024)
+    # read 512 bytes from file
+    message = f.read(512)
     # if end of file break
     if(len(message) == 0):
         break

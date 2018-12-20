@@ -28,8 +28,8 @@ udp_socket_r2.bind((broker_ip_2,udp2_port))
 
 while 1 : 
     
-    # receive 1024 bytes data from source 
-    data = conn.recv(1024)
+    # receive 512 bytes data from source 
+    data = conn.recv(512)
 
     #if data is valid
     if data : 
@@ -41,7 +41,7 @@ while 1 :
             # send message to router1
             udp_socket_r1.sendto(data,(destination_ip_1,udp1_port))
             # receive destination reply from router1 
-            rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(1024)
+            rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
             # send reply to source
             conn.sendall(rcv_msg_r1)
             
@@ -50,7 +50,7 @@ while 1 :
              # send message to router2
             udp_socket_r2.sendto(data,(destination_ip_2,udp2_port))
             # receive destination reply from router2
-            rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(1024)
+            rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
              # send reply to source
             conn.sendall(rcv_msg_r2)
             
