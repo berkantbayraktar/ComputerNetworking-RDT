@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
         #if data is valid
         if data : 
-            checksum_string = str(internet_checksum(data)) #Calculate checksum of the packet and convert it into string
+            checksum_string = str(internet_checksum(data)) # Calculate checksum of the packet and convert it into string
             checksum_lenght = len(checksum_string) #length of checksum
             
             # if random number is 1 send to destination via router_1
