@@ -36,6 +36,7 @@ while 1 :
         # pick either 0 or 1 for deciding which router to send
         rand = randint(0, 1)
         # if random number is 1 send to router1 
+        print('rand:',rand)
         if rand == 1 : 
             # send message to router1
             udp_socket_r1.sendto(data,(destination_ip_1,udp1_port))
