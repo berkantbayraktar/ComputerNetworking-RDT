@@ -57,7 +57,7 @@ class myThread(Thread): # Thread class
                     checksum_str = self.data[1:checksum_length+1]
                     payload = self.data[checksum_length+1:]
                     flag = internet_checksum(payload,int(checksum_str))
-                    # send received time as reply to routers
+                    # send received time as reply to routers                   
                     r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))  
                     # print received message
                     print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
@@ -74,7 +74,7 @@ class myThread(Thread): # Thread class
                     checksum_str = self.data[1:checksum_length+1]
                     payload = self.data[checksum_length+1:]
                     flag = internet_checksum(payload,int(checksum_str))
-                    # send received time as reply to routers
+                    # send received time as reply to routers                
                     r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
                     # print received message
                     print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag:',flag)

@@ -55,7 +55,7 @@ if __name__ == '__main__':
             checksum_lenght = len(checksum_string) #length of checksum
             
             # if random number is 1 send to destination via router_1
-            print('rand:',rand)
+           # print('rand:',rand)
             if rand == 1 : 
                 # send message to destination via router_1
                 udp_socket_r1.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_1,udp1_port))
