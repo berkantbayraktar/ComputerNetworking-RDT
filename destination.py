@@ -6,6 +6,9 @@ from threading import Thread
 import time
 import json
 
+
+broker_ip_1 = '10.10.1.2' # broker ip
+broker_ip_2 = '10.10.2.1' # broker ip
 dest_ip_1 = '10.10.3.2' # IP adddress of the destination node
 dest_ip_2 = '10.10.5.2' # IP adddress of the destination node
 r1_port = 19077 # port number for receiving data from r1
@@ -35,7 +38,7 @@ class myThread(Thread): # Thread class
                 # if received data is valid
                 if self.data:
                     # send received time as reply to routers
-                    r1_udp_sock.sendto(str(time.time()),('10.10.1.2',self.PORT))  
+                    r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))  
                     # print received message
                     print(self.data)
                    
@@ -48,7 +51,7 @@ class myThread(Thread): # Thread class
                 # if received data is valid
                 if self.data:  
                     # send received time as reply to routers
-                    r1_udp_sock.sendto(str(time.time()),('10.10.2.1',self.PORT))
+                    r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
                     # print received message
                     print(self.data)
                     
