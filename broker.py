@@ -25,6 +25,7 @@ udp_socket_r1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp_socket_r2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp_socket_r1.bind((broker_ip_1,udp1_port))
 udp_socket_r2.bind((broker_ip_2,udp2_port))
+rand = randint(0, 1)
 
 while 1 : 
     
@@ -34,7 +35,7 @@ while 1 :
     #if data is valid
     if data : 
         # pick either 0 or 1 for deciding which router to send
-        rand = randint(0, 1)
+        
         # if random number is 1 send to router1 
         print('rand:',rand)
         if rand == 1 : 
@@ -44,15 +45,17 @@ while 1 :
             rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
             # send reply to source
             conn.sendall(rcv_msg_r1)
+            rand = 0
             
         # otherwise send to router2
-        else :
+        elif rand == 0:
              # send message to router2
             udp_socket_r2.sendto(data,(destination_ip_2,udp2_port))
             # receive destination reply from router2
             rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
              # send reply to source
             conn.sendall(rcv_msg_r2)
+            rand = 1
             
 
 # close tcp connection
