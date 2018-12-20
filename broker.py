@@ -67,6 +67,7 @@ if __name__ == '__main__':
                 except socket.timeout:
                     print('TIMEOUT')
                     conn.sendall('NACK')
+                    rand = 0
                 
                 else:
                     # send reply to source
@@ -83,6 +84,7 @@ if __name__ == '__main__':
                 except socket.timeout:
                     print('TIMEOUT')
                     conn.sendall('NACK')
+                    rand  = 1
                 else:
                     # send reply to source
                     conn.sendall(rcv_msg_r2)
