@@ -11,7 +11,7 @@
 #
 # http://www.netfor2.com/ipsum.htm
 # http://www.netfor2.com/checksum.html
-
+import sys
 def ichecksum(data, sum=0):
     """ Compute the Internet Checksum of the supplied data.  The checksum is
     initialized to zero.  Place the return value in the checksum field of a
@@ -38,5 +38,6 @@ def ichecksum(data, sum=0):
     return sum & 0xFFFF
 
 check = ichecksum('list\n')
+print(sys.getsizeof(check))
 print check
 print ichecksum('list\n',check)

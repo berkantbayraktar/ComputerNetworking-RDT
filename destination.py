@@ -37,10 +37,12 @@ class myThread(Thread): # Thread class
                 self.data,self.addr = r1_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:
+                    checksum_length = int(self.data[0])
+                    checksum_str = self.data[1:checksum_length+1]
                     # send received time as reply to routers
                     r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))  
                     # print received message
-                    print(self.data)
+                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str)
                    
                  
                     
@@ -50,10 +52,12 @@ class myThread(Thread): # Thread class
                 self.data,self.addr = r2_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:  
+                    checksum_length = int(self.data[0])
+                    checksum_str = self.data[1:checksum_length+1]
                     # send received time as reply to routers
                     r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
                     # print received message
-                    print(self.data)
+                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str)
                     
         
                     

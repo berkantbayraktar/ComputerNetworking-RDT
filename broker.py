@@ -51,13 +51,14 @@ if __name__ == '__main__':
 
         #if data is valid
         if data : 
-            
+            checksum_string = str(internet_checksum(data)) #Calculate checksum of the packet and convert it into string
+            checksum_lenght = len(checksum_string) #length of checksum
             
             # if random number is 1 send to destination via router_1
             print('rand:',rand)
             if rand == 1 : 
                 # send message to destination via router_1
-                udp_socket_r1.sendto(str(internet_checksum(data))+data,(destination_ip_1,udp1_port))
+                udp_socket_r1.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_1,udp1_port))
                 # receive destination reply from destination via router_1
                 rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
                 # send reply to source
@@ -67,7 +68,7 @@ if __name__ == '__main__':
             # otherwise send to destination via router_2
             elif rand == 0:
                 # send message to destination via router_2
-                udp_socket_r2.sendto(str(internet_checksum(data))+data,(destination_ip_2,udp2_port))
+                udp_socket_r2.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_2,udp2_port))
                 # receive destination reply from destination via router_2
                 rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
                 # send reply to source
