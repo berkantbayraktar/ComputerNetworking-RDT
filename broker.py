@@ -5,13 +5,13 @@ import socket
 from random import randint
 
 
-broker_ip_1 = '10.10.1.2' # broker ip
-broker_ip_2 = '10.10.2.1' # broker ip
-destination_ip_1 = '10.10.3.2'
-destination_ip_2 =  '10.10.5.2'
+broker_ip_1 = '10.10.1.2' # broker ip-1     ASSIGNED RECEıVER OF ROUTER_1
+broker_ip_2 = '10.10.2.1' # broker ip-2     ASSIGNED RECEIVER OF ROUTER_2
+destination_ip_1 = '10.10.3.2' # destination ip-1   ASSIGNED FOR ROUTE BROKER-> ROUTER_1 -> DESTINATION
+destination_ip_2 =  '10.10.5.2' #destination ip-2   ASSIGNED FOR ROUTE BROKER-> ROUTER_2 -> DESTINATION
 tcp_port = 25574 # port number for receiving
-udp1_port = 19077 # port number for sending to router1
-udp2_port = 19078 # port number for sending to router2
+udp1_port = 19077 # port number for sending to destination via router_1  
+udp2_port = 19078 # port number for sending to destination via router_2
 
 # create TCP socket for source
 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -34,24 +34,24 @@ while 1 :
 
     #if data is valid
     if data : 
-        # pick either 0 or 1 for deciding which router to send
         
-        # if random number is 1 send to router1 
+        
+        # if random number is 1 send to destination via router_1
         print('rand:',rand)
         if rand == 1 : 
-            # send message to router1
+            # send message to destination via router_1
             udp_socket_r1.sendto(data,(destination_ip_1,udp1_port))
-            # receive destination reply from router1 
+            # receive destination reply from destination via router_1
             rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
             # send reply to source
             conn.sendall(rcv_msg_r1)
             rand = 0
             
-        # otherwise send to router2
+        # otherwise send to destination via router_2
         elif rand == 0:
-             # send message to router2
+             # send message to destination via router_2
             udp_socket_r2.sendto(data,(destination_ip_2,udp2_port))
-            # receive destination reply from router2
+            # receive destination reply from destination via router_2
             rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
              # send reply to source
             conn.sendall(rcv_msg_r2)
