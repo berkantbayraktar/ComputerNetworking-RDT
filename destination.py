@@ -22,6 +22,22 @@ r1_udp_sock.bind((dest_ip_1,r1_port))
 r2_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 r2_udp_sock.bind((dest_ip_2,r2_port))
 
+def internet_checksum(data, sum=0):
+    for i in range(0,len(data),2):
+        if i + 1 >= len(data):
+            sum += ord(data[i]) & 0xFF
+        else:
+            w = ((ord(data[i]) << 8) & 0xFF00) + (ord(data[i+1]) & 0xFF)
+            sum += w
+
+    while (sum >> 16) > 0:
+        sum = (sum & 0xFFFF) + (sum >> 16)
+
+    sum = ~sum
+
+    return sum & 0xFFFF
+
+
 class myThread(Thread): # Thread class 
 
     #constructor for thread , construct with host and port number
@@ -39,10 +55,12 @@ class myThread(Thread): # Thread class
                 if self.data:
                     checksum_length = int(self.data[0])
                     checksum_str = self.data[1:checksum_length+1]
+                    payload = self.data[checksum_length+1:]
+                    flag = internet_checksum(payload,int(checksum_str))
                     # send received time as reply to routers
                     r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))  
                     # print received message
-                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str)
+                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
                    
                  
                     
@@ -54,10 +72,12 @@ class myThread(Thread): # Thread class
                 if self.data:  
                     checksum_length = int(self.data[0])
                     checksum_str = self.data[1:checksum_length+1]
+                    payload = self.data[checksum_length+1:]
+                    flag = internet_checksum(payload,int(checksum_str))
                     # send received time as reply to routers
                     r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
                     # print received message
-                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str)
+                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag:',flag)
                     
         
                     

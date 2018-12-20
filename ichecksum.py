@@ -38,6 +38,5 @@ def ichecksum(data, sum=0):
     return sum & 0xFFFF
 
 check = ichecksum('list\n')
-print(sys.getsizeof(check))
 print check
 print ichecksum('list\n',check)
