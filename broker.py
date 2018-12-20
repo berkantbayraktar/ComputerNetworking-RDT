@@ -42,6 +42,8 @@ if __name__ == '__main__':
     udp_socket_r2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket_r1.bind((broker_ip_1,udp1_port))
     udp_socket_r2.bind((broker_ip_2,udp2_port))
+    udp_socket_r1.settimeout(1)
+    udp_socket_r2.settimeout(1)
     rand = randint(0, 1)
 
     while 1 : 
@@ -59,21 +61,34 @@ if __name__ == '__main__':
             if rand == 1 : 
                 # send message to destination via router_1
                 udp_socket_r1.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_1,udp1_port))
-                # receive destination reply from destination via router_1
-                rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
-                # send reply to source
-                conn.sendall(rcv_msg_r1)
-                rand = 0
+                try:    
+                    # receive destination reply from destination via router_1
+                    rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
+                except socket.timeout:
+                    print('TIMEOUT')
+                    udp_socket_r1.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_1,udp1_port))
+                    continue
+                
+                else:
+                    # send reply to source
+                    conn.sendall(rcv_msg_r1)
+                    rand = 0
                 
             # otherwise send to destination via router_2
             elif rand == 0:
                 # send message to destination via router_2
                 udp_socket_r2.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_2,udp2_port))
-                # receive destination reply from destination via router_2
-                rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
-                # send reply to source
-                conn.sendall(rcv_msg_r2)
-                rand = 1
+                try:
+                    # receive destination reply from destination via router_2
+                    rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
+                except socket.timeout:
+                    print('TIMEOUT')
+                    udp_socket_r2.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_2,udp2_port))
+                    continue
+                else:
+                    # send reply to source
+                    conn.sendall(rcv_msg_r2)
+                    rand = 1
                 
 
     # close tcp connection

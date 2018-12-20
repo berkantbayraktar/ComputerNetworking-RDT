@@ -22,6 +22,7 @@ r1_udp_sock.bind((dest_ip_1,r1_port))
 r2_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 r2_udp_sock.bind((dest_ip_2,r2_port))
 
+
 def internet_checksum(data, sum=0):
     for i in range(0,len(data),2):
         if i + 1 >= len(data):
@@ -56,11 +57,16 @@ class myThread(Thread): # Thread class
                     checksum_length = int(self.data[0])
                     checksum_str = self.data[1:checksum_length+1]
                     payload = self.data[checksum_length+1:]
-                    flag = internet_checksum(payload,int(checksum_str))
-                    # send received time as reply to routers                   
-                    r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))  
-                    # print received message
-                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
+                    flag = internet_checksum(payload,int(checksum_str))                    
+                    try:
+                        # send received time as reply to routers   
+                        r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))
+                    except :
+                        print('gonderemedim')  
+                        continue
+                    else:
+                        # print received message
+                        print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
                    
                  
                     
@@ -74,10 +80,15 @@ class myThread(Thread): # Thread class
                     checksum_str = self.data[1:checksum_length+1]
                     payload = self.data[checksum_length+1:]
                     flag = internet_checksum(payload,int(checksum_str))
-                    # send received time as reply to routers                
-                    r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
-                    # print received message
-                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag:',flag)
+                    try:
+                        # send received time as reply to routers                
+                        r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
+                    except :
+                        print('gonderemedim -r2')
+                        continue
+                    else:
+                        # print received message
+                        print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag:',flag)
                     
         
                     
