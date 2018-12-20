@@ -74,7 +74,7 @@ After finding correct internet interfaces of nodes by ```ifconfig``` command,
 
 For experiment 1:
 
-* We added 1ms+-5ms network emulating delay to the eth0 and eth1 interface 
+* We added 1ms+-5ms network emulating delay to the eth2 and eth1 interface 
     for r1 and r2 links of destination node.
 
 * For r1 link :
@@ -87,7 +87,7 @@ For experiment 1:
 ```
  
 
-* We added 1ms+-5ms network emulating delay to the eth0 and eth1 interface 
+* We added 1ms+-5ms network emulating delay to the eth1 interfaces 
     for r1 and r2 links of broker node.
 
 * For r1 link :
@@ -101,7 +101,7 @@ For experiment 1:
 
 For experiment 2:
 
-* We changed to 20ms+-5ms network emulating delay to the eth0 and eth1 interface 
+* We changed to 20ms+-5ms network emulating delay to the eth2 and eth1 interface 
     for r1 and r2 links of destination node.
 
 * For r1 link :
@@ -114,7 +114,7 @@ For experiment 2:
 ```
  
 
-* We changed to 20ms+-5ms network emulating delay to the eth0 and eth1 interface 
+* We changed to 20ms+-5ms network emulating delay to the eth1 interfaces
     for r1 and r2 links of broker node.
 
 * For r1 link :
@@ -128,7 +128,7 @@ For experiment 2:
 
 For experiment 3:
 
-* We changed to 20ms+-5ms network emulating delay to the eth0 and eth1 interface 
+* We changed to 20ms+-5ms network emulating delay to the eth2 and eth1 interface 
     for r1 and r2 links of destination node.
 
 * For r1 link :
@@ -141,7 +141,7 @@ For experiment 3:
 ```
  
 
-* We changed to 20ms+-5ms network emulating delay to the eth0 and eth1 interface 
+* We changed to 20ms+-5ms network emulating delay to the eth1 interfaces
     for r1 and r2 links of broker node.
 
 * For r1 link :

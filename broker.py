@@ -6,8 +6,8 @@ from random import randint
 
 
 broker_ip = '10.10.1.2' # broker ip
-router_ip_1 = '10.10.2.2' # router1 ip
-router_ip_2 = '10.10.4.2' # router2 ip
+router_ip_1 = '10.10.3.2' # destination ip
+router_ip_2 = '10.10.3.2' # destination ip
 tcp_port = 25574 # port number for receiving
 udp1_port = 19077 # port number for sending to router1
 udp2_port = 25570 # port number for sending to router2

@@ -7,8 +7,8 @@ import time
 import json
 
 dest_ip = '10.10.3.2' # IP adddress of the destination node
-r1_port = 25572 # port number for receiving data from r1
-r2_port = 25573 # port number for receiving data from r2
+r1_port = 19077 # port number for receiving data from r1
+r2_port = 25570 # port number for receiving data from r2
 
 # create and bind socket for receiving data from router1
 r1_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
