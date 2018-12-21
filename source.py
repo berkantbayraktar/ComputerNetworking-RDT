@@ -27,7 +27,6 @@ packets = []
 
 base = 0
 WINDOW_SIZE = 4
-SEGMENT_SIZE = 512
 TIMEOUT = WINDOW_SIZE / 4
 
 HOST = '10.10.1.2' # broker ip
@@ -71,6 +70,7 @@ acked = False
 class sender(Thread):
     def __init__(self): 
 	    Thread.__init__(self)
+        
 
         
     def run(self):
