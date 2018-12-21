@@ -21,7 +21,7 @@ r1_udp_sock.bind((dest_ip_1,r1_port))
 # create and bind socket for receiving data from router2
 r2_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 r2_udp_sock.bind((dest_ip_2,r2_port))
-
+FILE = open("output.txt","w")
 
 def internet_checksum(data, sum=0):
     for i in range(0,len(data),2):
@@ -45,8 +45,9 @@ class myThread(Thread): # Thread class
     def __init__(self, HOST, PORT): 
 	    Thread.__init__(self)
 	    self.HOST = HOST
-	    self.PORT = PORT       
-    
+	    self.PORT = PORT
+
+
     def run(self):
         if(self.PORT == 19077):  # if port number reserved for router1
             while 1:
@@ -57,7 +58,9 @@ class myThread(Thread): # Thread class
                     checksum_length = int(self.data[0])
                     checksum_str = self.data[1:checksum_length+1]
                     payload = self.data[checksum_length+1:]
-                    flag = internet_checksum(payload,int(checksum_str))                    
+                    flag = internet_checksum(payload,int(checksum_str))
+                    if not flag:
+                        FILE.write(payload)                    
                     # send received time as reply to routers   
                     r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))
                     # print received message
@@ -75,6 +78,8 @@ class myThread(Thread): # Thread class
                     checksum_str = self.data[1:checksum_length+1]
                     payload = self.data[checksum_length+1:]
                     flag = internet_checksum(payload,int(checksum_str))
+                    if not flag:
+                        FILE.write(payload) 
                     # send received time as reply to routers                
                     r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
                     # print received message
@@ -87,7 +92,7 @@ class myThread(Thread): # Thread class
 
 
 if __name__ == '__main__': 
-
+    
     # create thread for router1 socket
     Thread_r1 = myThread(dest_ip_1, r1_port)
     
@@ -102,3 +107,4 @@ if __name__ == '__main__':
 # Close threads
     Thread_r1.join()
     Thread_r2.join()
+    FILE.close()
