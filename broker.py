@@ -1,24 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
-
 import socket
 from random import randint
-
-def internet_checksum(data, sum=0):
-    for i in range(0,len(data),2):
-        if i + 1 >= len(data):
-            sum += ord(data[i]) & 0xFF
-        else:
-            w = ((ord(data[i]) << 8) & 0xFF00) + (ord(data[i+1]) & 0xFF)
-            sum += w
-
-    while (sum >> 16) > 0:
-        sum = (sum & 0xFFFF) + (sum >> 16)
-
-    sum = ~sum
-
-    return sum & 0xFFFF
-
 
 if __name__ == '__main__': 
 
@@ -53,20 +36,17 @@ if __name__ == '__main__':
 
         #if data is valid
         if data : 
-            checksum_string = str(internet_checksum(data)) #Calculate checksum of the packet and convert it into string
-            checksum_lenght = len(checksum_string) #length of checksum
             
             # if random number is 1 send to destination via router_1
-           # print('rand:',rand)
             if rand == 1 : 
                 # send message to destination via router_1
-                udp_socket_r1.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_1,udp1_port))
+                udp_socket_r1.sendto(data,(destination_ip_1,udp1_port))
                 try:    
                     # receive destination reply from destination via router_1
-                    rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
+                    rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(50)
                 except socket.timeout:
                     print('TIMEOUT')
-                    conn.sendall('NACK')
+                    #conn.sendall('NACK')
                     rand = 0
                 
                 else:
@@ -77,13 +57,13 @@ if __name__ == '__main__':
             # otherwise send to destination via router_2
             elif rand == 0:
                 # send message to destination via router_2
-                udp_socket_r2.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_2,udp2_port))
+                udp_socket_r2.sendto(data,(destination_ip_2,udp2_port))
                 try:
                     # receive destination reply from destination via router_2
-                    rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
+                    rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(50)
                 except socket.timeout:
                     print('TIMEOUT')
-                    conn.sendall('NACK')
+                    #conn.sendall('NACK')
                     rand  = 1
                 else:
                     # send reply to source

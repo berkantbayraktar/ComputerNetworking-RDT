@@ -6,7 +6,7 @@ from threading import Thread
 import time
 import json
 
-
+FILE = open("output.txt","w")
 broker_ip_1 = '10.10.1.2' # broker ip
 broker_ip_2 = '10.10.2.1' # broker ip
 dest_ip_1 = '10.10.3.2' # IP adddress of the destination node
@@ -38,6 +38,7 @@ def internet_checksum(data, sum=0):
 
     return sum & 0xFFFF
 
+expected_seq = 0
 
 class myThread(Thread): # Thread class 
 
@@ -54,31 +55,51 @@ class myThread(Thread): # Thread class
                 self.data,self.addr = r1_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:
-                    checksum_length = int(self.data[0])
-                    checksum_str = self.data[1:checksum_length+1]
-                    payload = self.data[checksum_length+1:]
-                    flag = internet_checksum(payload,int(checksum_str))                    
-                    # send received time as reply to routers   
-                    r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))
+                    seq_length = int(self.data[0])
+                    seq_number = int(self.data[1:seq_length+1])
+                    checksum_length = int(self.data[seq_length + 1])
+                    checksum_str = self.data[seq_length + 2 : seq_length + checksum_length + 2]
+                    payload = self.data[checksum_length + 2:]
+                    flag = internet_checksum(payload,int(checksum_str))  
+
+                    if seq_number == expected_seq and flag == 0:
+                         # send cumulative ack to broker 
+                        r1_udp_sock.sendto(str(expected_seq),(broker_ip_1,self.PORT))
+                        expected_seq += 1
+                        FILE.write(payload)
+
+                    else:
+                        r1_udp_sock.sendto(str(expected_seq - 1),(broker_ip_1,self.PORT))                
+                   
                     # print received message
                     print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
                    
                  
                     
         else:   #if port number reserved for router2
-            while 1:
-                # receive 512 byte data from router2
+           while 1:
+                # receive 512 byte data from router1
                 self.data,self.addr = r2_udp_sock.recvfrom(512)
                 # if received data is valid
-                if self.data:  
-                    checksum_length = int(self.data[0])
-                    checksum_str = self.data[1:checksum_length+1]
-                    payload = self.data[checksum_length+1:]
-                    flag = internet_checksum(payload,int(checksum_str))
-                    # send received time as reply to routers                
-                    r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
+                if self.data:
+                    seq_length = int(self.data[0])
+                    seq_number = int(self.data[1:seq_length+1])
+                    checksum_length = int(self.data[seq_length + 1])
+                    checksum_str = self.data[seq_length + 2 : seq_length + checksum_length + 2]
+                    payload = self.data[checksum_length + 2:]
+                    flag = internet_checksum(payload,int(checksum_str))  
+
+                    if seq_number == expected_seq and flag == 0:
+                         # send cumulative ack to broker 
+                        r2_udp_sock.sendto(str(expected_seq),(broker_ip_2,self.PORT))
+                        expected_seq += 1
+                        FILE.write(payload)
+
+                    else:
+                         r2_udp_sock.sendto(str(expected_seq - 1),(broker_ip_2,self.PORT))                
+                   
                     # print received message
-                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag:',flag)
+                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
                     
         
                     
