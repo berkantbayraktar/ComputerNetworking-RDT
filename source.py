@@ -43,7 +43,7 @@ f = open("./demofile.txt","r")
 seq_num = 0
 # load file to the packets list
 while True:
-    payload = f.read(450)
+    payload = f.read(300)
     if not payload:
         break
 
@@ -55,6 +55,8 @@ while True:
     packets.append(seq_length + s_num
     + checksum_length + checksum_string
     + payload)
+
+    seq_num +=1
 
 num_packets = len(packets)
 
@@ -70,6 +72,8 @@ class sender(Thread):
 	    Thread.__init__(self)
         
     def run(self):
+        global base
+        global acked
         WINDOW_SIZE = 4
         TIMEOUT = WINDOW_SIZE / 4
         next_to_send = 0
@@ -78,6 +82,7 @@ class sender(Thread):
 
             while next_to_send < base + WINDOW_SIZE:
                 s.send(packets[next_to_send])
+                print(packets[next_to_send])
                 next_to_send += 1
 
             start = time.time()
@@ -98,7 +103,8 @@ class receiver(Thread):
 	    Thread.__init__(self)
     
     def run(self):
-        
+        global base
+        global acked
         while True:
             rcv_data = s.recv(50) # receive destination reply from broker
             ack_number = int(rcv_data) # convert time string to float
