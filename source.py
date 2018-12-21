@@ -58,6 +58,7 @@ while True:
 
     seq_num +=1
 
+
 num_packets = len(packets)
 
 # close file
@@ -82,6 +83,7 @@ class sender(Thread):
 
             while next_to_send < base + WINDOW_SIZE:
                 s.send(packets[next_to_send])
+                time.sleep(0.1)
                 print(packets[next_to_send])
                 next_to_send += 1
 
@@ -107,6 +109,7 @@ class receiver(Thread):
         global acked
         while True:
             rcv_data = s.recv(50) # receive destination reply from broker
+            time.sleep(0.1)
             ack_number = int(rcv_data) # convert time string to float
             
             if(ack_number >= base):
