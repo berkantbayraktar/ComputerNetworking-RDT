@@ -21,7 +21,7 @@ r1_udp_sock.bind((dest_ip_1,r1_port))
 # create and bind socket for receiving data from router2
 r2_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 r2_udp_sock.bind((dest_ip_2,r2_port))
-
+FILE = open("output.txt","w")
 
 def internet_checksum(data, sum=0):
     for i in range(0,len(data),2):
@@ -59,6 +59,8 @@ class myThread(Thread): # Thread class
                     payload = self.data[checksum_length+1:]
                     flag = internet_checksum(payload,int(checksum_str))                    
                     # send received time as reply to routers   
+                    if flag == 0:
+                        FILE.write(payload)
                     r1_udp_sock.sendto(str(time.time()),(broker_ip_1,self.PORT))
                     # print received message
                     print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
@@ -76,6 +78,8 @@ class myThread(Thread): # Thread class
                     payload = self.data[checksum_length+1:]
                     flag = internet_checksum(payload,int(checksum_str))
                     # send received time as reply to routers                
+                    if flag == 0:
+                        FILE.write(payload)
                     r2_udp_sock.sendto(str(time.time()),(broker_ip_2,self.PORT))
                     # print received message
                     print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag:',flag)
