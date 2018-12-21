@@ -4,7 +4,6 @@
 import socket
 from threading import Thread
 import time
-import json
 
 FILE = open("output.txt","w")
 broker_ip_1 = '10.10.1.2' # broker ip

@@ -22,10 +22,13 @@ def internet_checksum(data, sum=0):
 
 
 
+packets = []
+
+
+base = 0
 WINDOW_SIZE = 4
 SEGMENT_SIZE = 512
 TIMEOUT = WINDOW_SIZE / 4
-timer = Thread.Timer(TIMEOUT)
 
 HOST = '10.10.1.2' # broker ip
 PORT = 25574  # port number 
@@ -40,10 +43,8 @@ s.connect((HOST,PORT))
 f = open("./demofile.txt","r")
 
 
-# Add all the packets to the buffer
-packets = []
+# Initialize sequence number
 seq_num = 0
-
 # load file to the packets list
 while True:
     payload = f.read(450)
@@ -59,21 +60,23 @@ while True:
     + checksum_length + checksum_string
     + payload)
 
+num_packets = len(packets)
+
 # close file
 f.close()
 
-num_packets = len(packets)
-next_to_send = 0
-base = 0
 
 acked = False
 
 class sender(Thread):
     def __init__(self): 
 	    Thread.__init__(self)
+
         
     def run(self):
-
+  
+        next_to_send = 0
+        
         while base < num_packets:
 
             while next_to_send < base + WINDOW_SIZE:
