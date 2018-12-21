@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*- 
 
 import socket
+import time
 from random import randint
 
 def internet_checksum(data, sum=0):
@@ -46,49 +47,66 @@ if __name__ == '__main__':
     udp_socket_r2.settimeout(1)
     rand = randint(0, 1)
 
+    SEGMENT_SIZE = 500
+    WINDOW_SIZE = 3
     while 1 : 
         
         # receive 512 bytes data from source 
-        data = conn.recv(512)
+        payload = ["","",""]
+        for i in range(WINDOW_SIZE):
+            payload[i] = conn.recv(512)
 
         #if data is valid
-        if data : 
-            checksum_string = str(internet_checksum(data)) # Calculate checksum of the packet and convert it into string
-            checksum_lenght = len(checksum_string) #length of checksum
+        if payload: 
+            
+            checksum_string = ["","",""]
+            checksum_length = [0,0,0]
+
+            for i in range(WINDOW_SIZE):                
+                checksum_string[i] = str(internet_checksum(payload[i])) #Calculate checksum of the packet and convert it into string
+                checksum_length[i] = len(checksum_string[i]) #length of checksum
             
             # if random number is 1 send to destination via router_1
            # print('rand:',rand)
             if rand == 1 : 
                 # send message to destination via router_1
-                udp_socket_r1.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_1,udp1_port))
-                try:    
-                    # receive destination reply from destination via router_1
-                    rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
-                except socket.timeout:
-                    print('TIMEOUT')
-                    conn.sendall('NACK')
-                    rand = 0
-                
-                else:
-                    # send reply to source
-                    conn.sendall(rcv_msg_r1)
-                    rand = 0
+                for i in range(WINDOW_SIZE):
+                    udp_socket_r1.sendto(str(checksum_length[i]) + checksum_string[i] + payload[i],(destination_ip_1,udp1_port))
+                    print('checksum_length: ', checksum_length[i], 'checksum_str: ', checksum_string[i])
+
+                for i in range(WINDOW_SIZE):
+                    try:    
+                        # receive destination reply from destination via router_1
+                        rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(512)
+                    except socket.timeout:
+                        conn.sendall('NACK')
+                        rand = 0
+                    
+                    else:
+                        time.sleep(0.1)
+                        # send reply to source
+                        conn.sendall(rcv_msg_r1)
+                        rand = 0
                 
             # otherwise send to destination via router_2
             elif rand == 0:
                 # send message to destination via router_2
-                udp_socket_r2.sendto(str(checksum_lenght) + checksum_string +data,(destination_ip_2,udp2_port))
-                try:
-                    # receive destination reply from destination via router_2
-                    rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
-                except socket.timeout:
-                    print('TIMEOUT')
-                    conn.sendall('NACK')
-                    rand  = 1
-                else:
-                    # send reply to source
-                    conn.sendall(rcv_msg_r2)
-                    rand = 1
+                for i in range(WINDOW_SIZE):
+                    udp_socket_r2.sendto(str(checksum_length[i]) + checksum_string[i] + payload[i],(destination_ip_2,udp2_port))
+                    print('checksum_length: ', checksum_length[i], 'checksum_str: ', checksum_string[i])
+                    
+                for i in range(WINDOW_SIZE):
+                    try:
+                        # receive destination reply from destination via router_2
+                        rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(512)
+                    except socket.timeout:
+                        conn.sendall('NACK')
+                        rand  = 1
+                    else:
+                        time.sleep(0.1)
+                        # send reply to source
+                        conn.sendall(rcv_msg_r2)
+                        rand = 1
                 
 
     # close tcp connection
