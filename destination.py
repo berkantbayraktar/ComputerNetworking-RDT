@@ -37,7 +37,7 @@ def internet_checksum(data, sum=0):
 
     return sum & 0xFFFF
 
-expected_seq = 0
+
 
 class myThread(Thread): # Thread class 
 
@@ -48,6 +48,9 @@ class myThread(Thread): # Thread class
 	    self.PORT = PORT       
     
     def run(self):
+        
+        expected_seq = 0
+
         if(self.PORT == 19077):  # if port number reserved for router1
             while 1:
                 # receive 512 byte data from router1

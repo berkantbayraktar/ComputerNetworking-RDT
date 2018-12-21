@@ -25,9 +25,6 @@ def internet_checksum(data, sum=0):
 packets = []
 
 
-base = 0
-WINDOW_SIZE = 4
-TIMEOUT = WINDOW_SIZE / 4
 
 HOST = '10.10.1.2' # broker ip
 PORT = 25574  # port number 
@@ -66,15 +63,15 @@ f.close()
 
 
 acked = False
+base = 0
 
 class sender(Thread):
     def __init__(self): 
 	    Thread.__init__(self)
         
-
-        
     def run(self):
-  
+        WINDOW_SIZE = 4
+        TIMEOUT = WINDOW_SIZE / 4
         next_to_send = 0
         
         while base < num_packets:
@@ -94,6 +91,7 @@ class sender(Thread):
                 next_to_send = base
             else:
                 WINDOW_SIZE =  min(WINDOW_SIZE, num_packets - base)
+                acked = False
 
 class receiver(Thread):
     def __init__(self): 
@@ -107,6 +105,7 @@ class receiver(Thread):
             
             if(ack_number >= base):
                 base = ack_number + 1
+                acked = True
 
 
 if __name__ == '__main__': 
