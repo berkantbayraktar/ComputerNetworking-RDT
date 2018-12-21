@@ -16,40 +16,38 @@ s.connect((HOST,PORT))
 
 # open file to be sent over the network
 f = open("./demofile.txt","r")
-WINDOW_SIZE = 3
-SEGMENT_SIZE = 500
 
+#set counter
+i = 0
+total_time = 0
 while 1:
-    message = ["","",""]
-    rcv_data = ["","",""]
-    ack_received = [False,False,False]
     # read 512 bytes from file
-    for i in range(WINDOW_SIZE):
-        message[i] = f.read(SEGMENT_SIZE)
+    message = f.read(500)
     # if end of file break
-    if(len(message[0]) == 0):
+    if(len(message) == 0):
         break
-
+    else:
+        i += 1
     # if message is valid
     if message:
+        ack_received = False
 
-        while not  (ack_received[0] and ack_received[1] and ack_received[2]) :
-            for i in range(WINDOW_SIZE):
-                print(message[i])
-                s.send(message[i]) # send data
-                time.sleep(0.1)
-
-            for i in range(WINDOW_SIZE):
-                try :
-                    rcv_data[i] = s.recv(512) # receive destination reply from broker  !!! MAKE SIZE FIXED !!!!
-                    f_rcv_data = float(rcv_data[i]) # convert time string to float
-                except :
-                    x = 1
-                else:
-                    print(rcv_data[i])
-                    ack_received[i] = True
-
+        while not ack_received:
+            s.send(message) # send data
+            rcv_data = s.recv(512) # receive destination reply from broker
             
+            try:
+                f_rcv_data = float(rcv_data) # convert time string to float
+                current_time = time.time() # calculate current time
+                total_time += current_time-f_rcv_data  # add end-to-end delay to total time.
+                # print the end-to-end delay in seconds
+                print('sent at :', repr(f_rcv_data), 'received at:',repr(current_time), 'difference:', repr(current_time- f_rcv_data))# print the end-to-end delay
+                # calculate avg end-to-end delay in seconds 
+                print('avg end-to-end delay for', repr(i), ' packets: '   ,repr(total_time/i))
+            except:
+                print('LOST PACKET')
+            else:
+                ack_received = True
         
 # close tcp socket
 s.close()
