@@ -31,7 +31,7 @@ while 1:
     # if message is valid
     if message:
         ack_received = False
-
+        xd = 1
         while not ack_received:
             s.send(message) # send data
             rcv_data = s.recv(512) # receive destination reply from broker
