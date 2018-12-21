@@ -57,11 +57,12 @@ class myThread(Thread): # Thread class
                 self.data,self.addr = r1_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:
+                    
                     seq_length = int(self.data[0])
                     seq_number = int(self.data[1:seq_length+1])
                     checksum_length = int(self.data[seq_length + 1])
                     checksum_str = self.data[seq_length + 2 : seq_length + checksum_length + 2]
-                    payload = self.data[checksum_length + 2:]
+                    payload = self.data[seq_length + checksum_length + 2:]
                     flag = internet_checksum(payload,int(checksum_str))  
 
                     if seq_number == expected_seq and flag == 0:
@@ -73,8 +74,8 @@ class myThread(Thread): # Thread class
                     else:
                         r1_udp_sock.sendto(str(expected_seq - 1),(broker_ip_1,self.PORT))                
                    
-                    # print received message
-                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
+                    #print received message
+                    print('seq_length: ',seq_length, 'seq_number: ',seq_number, 'checksum_length: ',checksum_length, 'checksum_str: ',checksum_str, 'flag: ',flag)
                    
                  
                     
@@ -84,11 +85,12 @@ class myThread(Thread): # Thread class
                 self.data,self.addr = r2_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:
+        
                     seq_length = int(self.data[0])
                     seq_number = int(self.data[1:seq_length+1])
                     checksum_length = int(self.data[seq_length + 1])
                     checksum_str = self.data[seq_length + 2 : seq_length + checksum_length + 2]
-                    payload = self.data[checksum_length + 2:]
+                    payload = self.data[seq_length + checksum_length + 2:]
                     flag = internet_checksum(payload,int(checksum_str))  
 
                     if seq_number == expected_seq and flag == 0:
@@ -100,8 +102,8 @@ class myThread(Thread): # Thread class
                     else:
                          r2_udp_sock.sendto(str(expected_seq - 1),(broker_ip_2,self.PORT))                
                    
-                    # print received message
-                    print('checksum_length: ', checksum_length, 'checksum_str: ', checksum_str, 'flag: ', flag)
+                    #print received message
+                    print('seq_length: ',seq_length, 'seq_number: ',seq_number, 'checksum_length: ',checksum_length, 'checksum_str: ',checksum_str, 'flag: ',flag)
                     
         
                     
