@@ -84,7 +84,9 @@ class myThread(Thread): # Thread class
                         FILE.write(payload)
 
                     else:
-                        r1_udp_sock.sendto(str(expected_seq - 1),(broker_ip_1,self.PORT))                
+                        # packetize ack message
+                        ack_message = packetize(expected_seq - 1)
+                        r2_udp_sock.sendto(ack_message,(broker_ip_2,self.PORT))             
                    
                     # print received message
                     print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
