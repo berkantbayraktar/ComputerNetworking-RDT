@@ -29,60 +29,58 @@ packets = []
 HOST = '10.10.1.2' # broker ip
 PORT = 25574  # port number 
 
-# create socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # create socket
+s.connect((HOST,PORT)) # connect
 
-# connect
-s.connect((HOST,PORT))
-
-# open file to be sent over the network
-f = open("./demofile.txt","r")
+f = open("./demofile.txt","r") # open file to be sent over the network
 
 
-# Initialize sequence number
-seq_num = 0
-# load file to the packets list
-while True:
+
+seq_num = 0 # Initialize sequence number
+
+while True: # load file to the packets list
     payload = f.read(300)
     if not payload:
         break
 
-    s_num = str(seq_num)
-    seq_length = str(len(s_num))
-    checksum_string = str(internet_checksum(payload)) # Calculate checksum of the packet and convert it into string
+    s_num = str(seq_num) # conver sequence number to string
+    seq_length = str(len(s_num)) # calculate length of the sequence number string
+    checksum_string = str(internet_checksum(payload)) # Calculate checksum of the payload and convert it into string
     checksum_length = str(len(checksum_string)) # length of checksum
     
     packets.append(seq_length + s_num
     + checksum_length + checksum_string
-    + payload)
+    + payload)    # packetize header + payload 
 
-    seq_num +=1
+    seq_num +=1 # increment sequence number by one
+
 
 num_packets = len(packets)
 
-# close file
-f.close()
+f.close() # after finishing reading file, close file...
 
 
 acked = False
 base = 0
+next_to_send = 0
+WINDOW_SIZE = 4
 
 class sender(Thread):
     def __init__(self): 
 	    Thread.__init__(self)
         
     def run(self):
-        global base
-        global acked
-        WINDOW_SIZE = 4
+        global base,acked,WINDOW_SIZE,next_to_send
+
         TIMEOUT = WINDOW_SIZE / 4
-        next_to_send = 0
+        
         
         while base < num_packets:
 
             while next_to_send < base + WINDOW_SIZE:
                 s.send(packets[next_to_send])
-                print(packets[next_to_send])
+                time.sleep(0.1)
+                #print(packets[next_to_send])
                 next_to_send += 1
 
             start = time.time()
@@ -90,6 +88,7 @@ class sender(Thread):
             # Wait for timeout or to be acked
             while time.time() - start < TIMEOUT and not acked:
                 time.sleep(0.05)
+                #print('time diff : ', time.time() - start)
             
             # if not received ack
             if not acked:
@@ -103,13 +102,15 @@ class receiver(Thread):
 	    Thread.__init__(self)
     
     def run(self):
-        global base
-        global acked
+        global base,acked
+
         while True:
             rcv_data = s.recv(50) # receive destination reply from broker
+            time.sleep(0.1)
             ack_number = int(rcv_data) # convert time string to float
             
             if(ack_number >= base):
+                print('ack number:',ack_number)
                 base = ack_number + 1
                 acked = True
 
