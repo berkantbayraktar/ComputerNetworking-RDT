@@ -8,12 +8,12 @@ import struct
 
 # Convert given integer to byte format
 def packetize(num):
-    return struct.pack("<I",num)
+    return struct.pack("<i",num)
 
 # Convert given byte to integer tuple
 # First value of the returned tuple is the value
 def unpacketize(packet):
-    return struct.unpack("<I",packet)[0]
+    return struct.unpack("<i",packet)[0]
 
 FILE = open("output.txt","w")
 broker_ip_1 = '10.10.1.2' # broker ip
@@ -69,36 +69,37 @@ class myThread(Thread): # Thread class
                 if self.data:
                     
                     seq_number = unpacketize(self.data[:4])
-                    checksum = unpacketize(self.data[4:8])
+                    if(seq_number != -1):
+                        checksum = unpacketize(self.data[4:8])
 
-                    payload = self.data[8:]
+                        payload = self.data[8:]
+                        flag = internet_checksum(payload,checksum)  
+
+                        if seq_number == expected_seq and flag == 0:
+                            print(payload)
+                            FILE.write(payload)
+                            # packetize ack message
+                            ack_message = packetize(expected_seq)
+                            # send cumulative ack to broker 
+                            r1_udp_sock.sendto(ack_message,(broker_ip_1,self.PORT))
+                            # increment expected sequence
+                            expected_seq += 1
+                            
+
+                        else:
+                            # packetize ack message
+                            ack_message = packetize(expected_seq - 1)
+                            r2_udp_sock.sendto(ack_message,(broker_ip_1,self.PORT))             
                     
-                    flag = internet_checksum(payload,checksum)  
-
-                    if seq_number == expected_seq and flag == 0:
-                        print(payload)
-                        FILE.write(payload)
-                        # packetize ack message
-                        ack_message = packetize(expected_seq)
-                        # send cumulative ack to broker 
-                        r1_udp_sock.sendto(ack_message,(broker_ip_1,self.PORT))
-                        # increment expected sequence
-                        expected_seq += 1
-                        
-
+                        # print received message
+                        print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
+                    
+                    # Exit
                     else:
-                        # packetize ack message
-                        ack_message = packetize(expected_seq - 1)
-                        r2_udp_sock.sendto(ack_message,(broker_ip_1,self.PORT))             
-                   
-                    # print received message
-                    print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
+                        print("Closing file")
+                        FILE.close()
+                        break
                 
-                # if end of the file
-                if len(self.data) == 0:
-                    print('len 0 a girdi panpa')
-                    FILE.close()
-                    break
                  
                     
         else:   #if port number reserved for router2
@@ -109,36 +110,37 @@ class myThread(Thread): # Thread class
                 if self.data:
         
                     seq_number = unpacketize(self.data[:4])
-                    checksum = unpacketize(self.data[4:8])
+                    if(seq_number != -1):
+                        checksum = unpacketize(self.data[4:8])
 
-                    payload = self.data[8:]
-                    
-                    flag = internet_checksum(payload,checksum)  
-                    
-                    if seq_number == expected_seq and flag == 0:
-                        print(payload)
-                        FILE.write(payload)
-                        # packetize ack message
-                        ack_message = packetize(expected_seq)
-                        # send cumulative ack to broker 
-                        r2_udp_sock.sendto(ack_message,(broker_ip_2,self.PORT))
-                        expected_seq += 1
+                        payload = self.data[8:]
                         
+                        flag = internet_checksum(payload,checksum)  
+                        
+                        if seq_number == expected_seq and flag == 0:
+                            print(payload)
+                            FILE.write(payload)
+                            # packetize ack message
+                            ack_message = packetize(expected_seq)
+                            # send cumulative ack to broker 
+                            r2_udp_sock.sendto(ack_message,(broker_ip_2,self.PORT))
+                            expected_seq += 1
+                            
 
-                    else:
-                        # packetize ack message
-                        ack_message = packetize(expected_seq - 1)
-                        r2_udp_sock.sendto(ack_message,(broker_ip_2,self.PORT))                
-                   
-                    #print received message
-                    print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
-                
-                # if end of the file
-                if len(self.data) == 0:
-                    print('len 0 a girdi panpa')
-                    FILE.close()
-                    break
+                        else:
+                            # packetize ack message
+                            ack_message = packetize(expected_seq - 1)
+                            r2_udp_sock.sendto(ack_message,(broker_ip_2,self.PORT))                
                     
+                        #print received message
+                        print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
+                    
+                    # Exit
+                    else:
+                        print("Closing file")
+                        FILE.close()
+                        break
+
         
                     
 

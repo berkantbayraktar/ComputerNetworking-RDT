@@ -8,12 +8,12 @@ import struct
 
 # Convert given integer to byte format
 def packetize(num):
-    return struct.pack("<I",num)
+    return struct.pack("<i",num)
 
 # Convert given byte to integer tuple
 # First value of the returned tuple is the value
 def unpacketize(packet):
-    return struct.unpack("<I",packet)[0]
+    return struct.unpack("<i",packet)[0]
 
 def internet_checksum(data, sum=0):
     for i in range(0,len(data),2):
@@ -89,11 +89,6 @@ class sender(Thread):
                     s.send(packets[next_to_send])
                     print(packets[next_to_send])
                 except IndexError:
-                    # Send empty packet as sentinel
-                    empty_message = b''
-                    s.send(empty_message)
-                    base = num_packets
-                    print("Closing sender")
                     break
                 else:
                     next_to_send += 1
@@ -111,6 +106,12 @@ class sender(Thread):
             else:
                 WINDOW_SIZE =  min(WINDOW_SIZE, num_packets - base)
                 acked = False
+
+        # Send seq_number = -1 as terminator
+        final_message = packetize(-1)
+        s.send(final_message)
+        base = num_packets
+        print("Closing sender")
 
        
 
