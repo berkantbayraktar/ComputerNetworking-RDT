@@ -31,6 +31,7 @@ r1_udp_sock.bind((dest_ip_1,r1_port))
 r2_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 r2_udp_sock.bind((dest_ip_2,r2_port))
 expected_seq = 0
+isRunning = True
 r1_udp_sock.settimeout(3)
 r2_udp_sock.settimeout(3)
 
@@ -62,6 +63,7 @@ class myThread(Thread): # Thread class
     def run(self):
         
         global expected_seq
+        global isRunning
 
         if(self.PORT == 19077):  # if port number reserved for router1
             while 1:
@@ -69,7 +71,9 @@ class myThread(Thread): # Thread class
                 try :
                     self.data,self.addr = r1_udp_sock.recvfrom(512)
                 except:
-                    print('Destination Thread-1 Closing')
+                    if not isRunning:
+                        print('Destination Thread-1 Closing')
+                        break
                 else:           
                     seq_number = unpacketize(self.data[:4])
                     if(seq_number != -1):
@@ -79,7 +83,6 @@ class myThread(Thread): # Thread class
                         flag = internet_checksum(payload,checksum)  
 
                         if seq_number == expected_seq and flag == 0:
-                            print(payload)
                             FILE.write(payload)
                             # packetize ack message
                             ack_message = packetize(expected_seq)
@@ -99,9 +102,10 @@ class myThread(Thread): # Thread class
                     
                     # Exit
                     else:
+                        isRunning = False
                         print("Closing file")
-                        print('Destination Thread-1 Closing')
                         FILE.close()
+                        print('Destination Thread-1 Closing')
                         break
                 
                  
@@ -113,7 +117,9 @@ class myThread(Thread): # Thread class
                     self.data,self.addr = r2_udp_sock.recvfrom(512)
 
                 except:
-                    print('Destination Thread-2 Closing')
+                    if not isRunning:
+                        print('Destination Thread-2 Closing')
+                        break
 
                 else:      
                     seq_number = unpacketize(self.data[:4])
@@ -125,7 +131,6 @@ class myThread(Thread): # Thread class
                         flag = internet_checksum(payload,checksum)  
                         
                         if seq_number == expected_seq and flag == 0:
-                            print(payload)
                             FILE.write(payload)
                             # packetize ack message
                             ack_message = packetize(expected_seq)
@@ -144,9 +149,11 @@ class myThread(Thread): # Thread class
                     
                     # Exit
                     else:
+                        isRunning = False
                         print("Closing file")
-                        print('Destination Thread-2 Closing')
                         FILE.close()
+                        print('Destination Thread-2 Closing')
+                        
                         break
 
 

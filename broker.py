@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*- 
 import socket
 from random import randint
+import struct
+
+def unpacketize(packet):
+    return struct.unpack("<i",packet)[0]
+
 
 if __name__ == '__main__': 
 
@@ -33,7 +38,8 @@ if __name__ == '__main__':
         
         # receive 512 bytes data from source 
         data = conn.recv(512)
-        print(data)
+        seq_number = unpacketize(data[:4])
+        
         #if data is valid
         if data : 
             
@@ -41,6 +47,8 @@ if __name__ == '__main__':
             if rand == 1 : 
                 # send message to destination via router_1
                 udp_socket_r1.sendto(data,(destination_ip_1,udp1_port))
+                if(seq_number == -1):
+                    exit(0)
                 try:    
                     # receive destination reply from destination via router_1
                     rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(4)
@@ -57,6 +65,8 @@ if __name__ == '__main__':
             elif rand == 0:
                 # send message to destination via router_2
                 udp_socket_r2.sendto(data,(destination_ip_2,udp2_port))
+                if(seq_number == -1):
+                    exit(0)
                 try:
                     # receive destination reply from destination via router_2
                     rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(4)

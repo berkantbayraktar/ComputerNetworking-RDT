@@ -87,7 +87,6 @@ class sender(Thread):
             while next_to_send < base + WINDOW_SIZE:
                 try:
                     s.send(packets[next_to_send])
-                    print(packets[next_to_send])
                 except IndexError:
                     break
                 else:
