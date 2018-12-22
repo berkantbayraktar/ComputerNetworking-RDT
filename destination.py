@@ -92,12 +92,12 @@ class myThread(Thread): # Thread class
                     print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
                 
                 # if end of the file
-                else:
+                else :
                     break
                  
                     
         else:   #if port number reserved for router2
-           while 1:
+            while 1:
                 # receive 1000 byte data from router1
                 self.data,self.addr = r2_udp_sock.recvfrom(512)
                 # if received data is valid

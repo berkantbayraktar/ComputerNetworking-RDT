@@ -85,9 +85,18 @@ class sender(Thread):
         while base < num_packets:
 
             while next_to_send < base + WINDOW_SIZE:
-                s.send(packets[next_to_send])
-                next_to_send += 1
-                print(packets[next_to_send])
+                try:
+                    s.send(packets[next_to_send])
+                    print(packets[next_to_send])
+                except IndexError:
+                    # Send empty packet as sentinel
+                    empty_message = b''
+                    s.send(empty_message)
+                    base = num_packets
+                    break
+                else:
+                    next_to_send += 1
+                
 
             start = time.time()
 
@@ -102,9 +111,7 @@ class sender(Thread):
                 WINDOW_SIZE =  min(WINDOW_SIZE, num_packets - base)
                 acked = False
 
-        # Send empty packet as sentinel
-        empty_message = b''
-        s.send(empty_message)
+       
 
 class receiver(Thread):
     def __init__(self): 
@@ -140,7 +147,7 @@ if __name__ == '__main__':
     src_snd_thread.join()
     src_rcv_thread.join()
 
-
 # close tcp socket
-s.close()
+    s.close()
+
 
