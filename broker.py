@@ -43,7 +43,7 @@ if __name__ == '__main__':
                 udp_socket_r1.sendto(data,(destination_ip_1,udp1_port))
                 try:    
                     # receive destination reply from destination via router_1
-                    rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(50)
+                    rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(4)
                 except socket.timeout:
                     print('TIMEOUT')
                     #conn.sendall('NACK')
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                 udp_socket_r2.sendto(data,(destination_ip_2,udp2_port))
                 try:
                     # receive destination reply from destination via router_2
-                    rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(50)
+                    rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(4)
                 except socket.timeout:
                     print('TIMEOUT')
                     #conn.sendall('NACK')

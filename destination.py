@@ -4,6 +4,16 @@
 import socket
 from threading import Thread
 import time
+import struct
+
+# Convert given integer to byte format
+def packetize(num):
+    return struct.pack("<I",num)
+
+# Convert given byte to integer tuple
+# First value of the returned tuple is the value
+def unpacketize(packet):
+    return struct.unpack("<I",packet)[0]
 
 FILE = open("output.txt","w")
 broker_ip_1 = '10.10.1.2' # broker ip
@@ -58,24 +68,25 @@ class myThread(Thread): # Thread class
                 # if received data is valid
                 if self.data:
                     
-                    seq_length = int(self.data[0])
-                    seq_number = int(self.data[1:seq_length+1])
-                    checksum_length = int(self.data[seq_length + 1])
-                    checksum_str = self.data[seq_length + 2 : seq_length + checksum_length + 2]
-                    payload = self.data[seq_length + checksum_length + 2:]
-                    flag = internet_checksum(payload,int(checksum_str))  
+                    # seq_length = int(self.data[0])
+                    seq_number = unpacketize(self.data[:4])
+                    # checksum_length = int(self.data[seq_length + 1])
+                    checksum = unpacketize(self.data[4:8])
+                    payload = self.data[8:]
+                    flag = internet_checksum(payload,checksum)  
 
                     if seq_number == expected_seq and flag == 0:
-                         # send cumulative ack to broker 
+                        # send cumulative ack to broker 
                         r1_udp_sock.sendto(str(expected_seq),(broker_ip_1,self.PORT))
+                        # increment expected sequence
                         expected_seq += 1
                         FILE.write(payload)
 
                     else:
                         r1_udp_sock.sendto(str(expected_seq - 1),(broker_ip_1,self.PORT))                
                    
-                    #print received message
-                    print('seq_length: ',seq_length, 'seq_number: ',seq_number, 'checksum_length: ',checksum_length, 'checksum_str: ',checksum_str, 'flag: ',flag)
+                    # print received message
+                    print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
                    
                  
                     
@@ -86,24 +97,28 @@ class myThread(Thread): # Thread class
                 # if received data is valid
                 if self.data:
         
-                    seq_length = int(self.data[0])
-                    seq_number = int(self.data[1:seq_length+1])
-                    checksum_length = int(self.data[seq_length + 1])
-                    checksum_str = self.data[seq_length + 2 : seq_length + checksum_length + 2]
-                    payload = self.data[seq_length + checksum_length + 2:]
-                    flag = internet_checksum(payload,int(checksum_str))  
+                    #seq_length = int(self.data[0])
+                    seq_number = unpacketize(self.data[:4])
+                    #checksum_length = int(self.data[seq_length + 1])
+                    checksum = unpacketize(self.data[4:8])
+                    payload = self.data[8:]
+                    flag = internet_checksum(payload,checksum)  
 
                     if seq_number == expected_seq and flag == 0:
-                         # send cumulative ack to broker 
-                        r2_udp_sock.sendto(str(expected_seq),(broker_ip_2,self.PORT))
+                        # packetize ack message
+                        ack_message = packetize(expected_seq)
+                        # send cumulative ack to broker 
+                        r2_udp_sock.sendto(ack_message,(broker_ip_2,self.PORT))
                         expected_seq += 1
                         FILE.write(payload)
 
                     else:
-                         r2_udp_sock.sendto(str(expected_seq - 1),(broker_ip_2,self.PORT))                
+                        # packetize ack message
+                        ack_message = packetize(expected_seq - 1)
+                        r2_udp_sock.sendto(ack_message,(broker_ip_2,self.PORT))                
                    
                     #print received message
-                    print('seq_length: ',seq_length, 'seq_number: ',seq_number, 'checksum_length: ',checksum_length, 'checksum_str: ',checksum_str, 'flag: ',flag)
+                    print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
                     
         
                     

@@ -4,6 +4,16 @@ import socket
 import sys
 import time
 from threading import Thread
+import struct
+
+# Convert given integer to byte format
+def packetize(num):
+    return struct.pack("<I",num)
+
+# Convert given byte to integer tuple
+# First value of the returned tuple is the value
+def unpacketize(packet):
+    return struct.unpack("<I",packet)[0]
 
 def internet_checksum(data, sum=0):
     for i in range(0,len(data),2):
@@ -39,18 +49,17 @@ f = open("./demofile.txt","r") # open file to be sent over the network
 seq_num = 0 # Initialize sequence number
 
 while True: # load file to the packets list
-    payload = f.read(300)
+    payload = f.read(504)
     if not payload:
         break
 
-    s_num = str(seq_num) # conver sequence number to string
-    seq_length = str(len(s_num)) # calculate length of the sequence number string
-    checksum_string = str(internet_checksum(payload)) # Calculate checksum of the payload and convert it into string
-    checksum_length = str(len(checksum_string)) # length of checksum
+    s_num = packetize(seq_num) # conver sequence number to string
+    #seq_length = str(len(s_num)) # calculate length of the sequence number string
+    checksum = packetize(internet_checksum(payload)) # Calculate checksum of the payload and convert it into string
+    #checksum_length = str(len(checksum_string)) # length of checksum
     
-    packets.append(seq_length + s_num
-    + checksum_length + checksum_string
-    + payload)    # packetize header + payload 
+    # packetize header + payload 
+    packets.append(s_num + checksum + payload)   
 
     seq_num +=1 # increment sequence number by one
 
@@ -79,8 +88,6 @@ class sender(Thread):
 
             while next_to_send < base + WINDOW_SIZE:
                 s.send(packets[next_to_send])
-                time.sleep(0.1)
-                #print(packets[next_to_send])
                 next_to_send += 1
 
             start = time.time()
@@ -105,9 +112,10 @@ class receiver(Thread):
         global base,acked
 
         while True:
-            rcv_data = s.recv(50) # receive destination reply from broker
-            time.sleep(0.1)
-            ack_number = int(rcv_data) # convert time string to float
+            rcv_data = s.recv(4) # receive destination reply (i.e. ACK)
+            print(len(rcv_data))
+            print rcv_data
+            ack_number = unpacketize(rcv_data) # get ack number
             
             if(ack_number >= base):
                 print('ack number:',ack_number)
