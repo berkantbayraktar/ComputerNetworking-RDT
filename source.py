@@ -128,6 +128,8 @@ class receiver(Thread):
                 print('ack number:',ack_number)
                 base = ack_number + 1
                 acked = True
+            elif(base >= num_packets):
+                break
 
 
 if __name__ == '__main__': 
