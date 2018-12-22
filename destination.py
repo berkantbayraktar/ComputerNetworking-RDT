@@ -31,6 +31,8 @@ r1_udp_sock.bind((dest_ip_1,r1_port))
 r2_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 r2_udp_sock.bind((dest_ip_2,r2_port))
 expected_seq = 0
+r1_udp_sock.settimeout(3)
+r2_udp_sock.settimeout(3)
 
 def internet_checksum(data, sum=0):
     for i in range(0,len(data),2):
@@ -64,10 +66,11 @@ class myThread(Thread): # Thread class
         if(self.PORT == 19077):  # if port number reserved for router1
             while 1:
                 # receive 1000 byte data from router1
-                self.data,self.addr = r1_udp_sock.recvfrom(512)
-                # if received data is valid
-                if self.data:
-                    
+                try :
+                    self.data,self.addr = r1_udp_sock.recvfrom(512)
+                except:
+                    print('Destination Thread-1 Closing')
+                else:           
                     seq_number = unpacketize(self.data[:4])
                     if(seq_number != -1):
                         checksum = unpacketize(self.data[4:8])
@@ -97,6 +100,7 @@ class myThread(Thread): # Thread class
                     # Exit
                     else:
                         print("Closing file")
+                        print('Destination Thread-1 Closing')
                         FILE.close()
                         break
                 
@@ -104,11 +108,14 @@ class myThread(Thread): # Thread class
                     
         else:   #if port number reserved for router2
             while 1:
-                # receive 1000 byte data from router1
-                self.data,self.addr = r2_udp_sock.recvfrom(512)
-                # if received data is valid
-                if self.data:
-        
+                try:
+                    # receive 1000 byte data from router1
+                    self.data,self.addr = r2_udp_sock.recvfrom(512)
+
+                except:
+                    print('Destination Thread-2 Closing')
+
+                else:      
                     seq_number = unpacketize(self.data[:4])
                     if(seq_number != -1):
                         checksum = unpacketize(self.data[4:8])
@@ -138,12 +145,9 @@ class myThread(Thread): # Thread class
                     # Exit
                     else:
                         print("Closing file")
+                        print('Destination Thread-2 Closing')
                         FILE.close()
                         break
-
-        
-                    
-
 
 
 
@@ -163,5 +167,3 @@ if __name__ == '__main__':
 # Close threads
     Thread_r1.join()
     Thread_r2.join()
-# Close file
-    FILE.close()
