@@ -110,7 +110,7 @@ class sender(Thread):
         final_message = packetize(-1)
         s.send(final_message)
         base = num_packets
-        print("Closing sender")
+        print("Closing sender Thread")
 
        
 
@@ -132,8 +132,8 @@ class receiver(Thread):
             
             # If receive the last ack
             if(ack_number >= num_packets-1):
-                print("Last ack message received:",num_packets)
-                print("Closing receiver")
+                print("Last ack message received:",num_packets-1)
+                print("Closing receiver Thread")
                 break
 
 
