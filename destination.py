@@ -64,7 +64,7 @@ class myThread(Thread): # Thread class
         if(self.PORT == 19077):  # if port number reserved for router1
             while 1:
                 # receive 1000 byte data from router1
-                self.data,self.addr = r1_udp_sock.recvfrom(1000)
+                self.data,self.addr = r1_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:
                     
@@ -99,7 +99,7 @@ class myThread(Thread): # Thread class
         else:   #if port number reserved for router2
            while 1:
                 # receive 1000 byte data from router1
-                self.data,self.addr = r2_udp_sock.recvfrom(1000)
+                self.data,self.addr = r2_udp_sock.recvfrom(512)
                 # if received data is valid
                 if self.data:
         

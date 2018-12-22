@@ -32,7 +32,7 @@ if __name__ == '__main__':
     while 1 : 
         
         # receive 512 bytes data from source 
-        data = conn.recv(1000)
+        data = conn.recv(512)
 
         #if data is valid
         if data : 
