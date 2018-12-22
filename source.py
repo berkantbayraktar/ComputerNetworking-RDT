@@ -93,6 +93,7 @@ class sender(Thread):
                     empty_message = b''
                     s.send(empty_message)
                     base = num_packets
+                    print("Closing sender")
                     break
                 else:
                     next_to_send += 1
@@ -128,7 +129,11 @@ class receiver(Thread):
                 print('ack number:',ack_number)
                 base = ack_number + 1
                 acked = True
-            elif(base >= num_packets):
+            
+            # If receive the last ack
+            if(ack_number >= num_packets):
+                print("Last ack message received:",num_packets)
+                print("Closing receiver")
                 break
 
 
