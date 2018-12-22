@@ -72,16 +72,19 @@ class myThread(Thread): # Thread class
                     checksum = unpacketize(self.data[4:8])
 
                     payload = self.data[8:]
+                    
                     flag = internet_checksum(payload,checksum)  
 
                     if seq_number == expected_seq and flag == 0:
+                        print(payload)
+                        FILE.write(payload)
                         # packetize ack message
                         ack_message = packetize(expected_seq)
                         # send cumulative ack to broker 
                         r1_udp_sock.sendto(ack_message,(broker_ip_1,self.PORT))
                         # increment expected sequence
                         expected_seq += 1
-                        FILE.write(payload)
+                        
 
                     else:
                         # packetize ack message
@@ -107,15 +110,18 @@ class myThread(Thread): # Thread class
                     checksum = unpacketize(self.data[4:8])
 
                     payload = self.data[8:]
+                    
                     flag = internet_checksum(payload,checksum)  
-
+                    
                     if seq_number == expected_seq and flag == 0:
+                        print(payload)
+                        FILE.write(payload)
                         # packetize ack message
                         ack_message = packetize(expected_seq)
                         # send cumulative ack to broker 
                         r2_udp_sock.sendto(ack_message,(broker_ip_2,self.PORT))
                         expected_seq += 1
-                        FILE.write(payload)
+                        
 
                     else:
                         # packetize ack message
