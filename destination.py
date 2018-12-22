@@ -95,7 +95,9 @@ class myThread(Thread): # Thread class
                     print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
                 
                 # if end of the file
-                else :
+                if len(self.data) == 0:
+                    print('len 0 a girdi panpa')
+                    FILE.close()
                     break
                  
                     
@@ -132,7 +134,9 @@ class myThread(Thread): # Thread class
                     print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
                 
                 # if end of the file
-                else:
+                if len(self.data) == 0:
+                    print('len 0 a girdi panpa')
+                    FILE.close()
                     break
                     
         

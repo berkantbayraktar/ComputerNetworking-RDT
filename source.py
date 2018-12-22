@@ -131,7 +131,7 @@ class receiver(Thread):
                 acked = True
             
             # If receive the last ack
-            if(ack_number >= num_packets):
+            if(ack_number >= num_packets-1):
                 print("Last ack message received:",num_packets)
                 print("Closing receiver")
                 break
