@@ -68,10 +68,9 @@ class myThread(Thread): # Thread class
                 # if received data is valid
                 if self.data:
                     
-                    # seq_length = int(self.data[0])
                     seq_number = unpacketize(self.data[:4])
-                    # checksum_length = int(self.data[seq_length + 1])
                     checksum = unpacketize(self.data[4:8])
+
                     payload = self.data[8:]
                     flag = internet_checksum(payload,checksum)  
 
@@ -99,10 +98,9 @@ class myThread(Thread): # Thread class
                 # if received data is valid
                 if self.data:
         
-                    #seq_length = int(self.data[0])
                     seq_number = unpacketize(self.data[:4])
-                    #checksum_length = int(self.data[seq_length + 1])
                     checksum = unpacketize(self.data[4:8])
+                    
                     payload = self.data[8:]
                     flag = internet_checksum(payload,checksum)  
 

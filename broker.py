@@ -46,7 +46,6 @@ if __name__ == '__main__':
                     rcv_msg_r1,addr_r1 = udp_socket_r1.recvfrom(4)
                 except socket.timeout:
                     print('TIMEOUT')
-                    #conn.sendall('NACK')
                     rand = 0
                 
                 else:
@@ -63,7 +62,6 @@ if __name__ == '__main__':
                     rcv_msg_r2,addr_r2 = udp_socket_r2.recvfrom(4)
                 except socket.timeout:
                     print('TIMEOUT')
-                    #conn.sendall('NACK')
                     rand  = 1
                 else:
                     # send reply to source

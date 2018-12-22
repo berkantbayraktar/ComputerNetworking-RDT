@@ -42,7 +42,7 @@ PORT = 25574  # port number
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # create socket
 s.connect((HOST,PORT)) # connect
 
-f = open("./demofile.txt","r") # open file to be sent over the network
+f = open("./demofile_light.txt","r") # open file to be sent over the network
 
 
 
@@ -54,9 +54,7 @@ while True: # load file to the packets list
         break
 
     s_num = packetize(seq_num) # conver sequence number to string
-    #seq_length = str(len(s_num)) # calculate length of the sequence number string
     checksum = packetize(internet_checksum(payload)) # Calculate checksum of the payload and convert it into string
-    #checksum_length = str(len(checksum_string)) # length of checksum
     
     # packetize header + payload 
     packets.append(s_num + checksum + payload)   
@@ -95,7 +93,6 @@ class sender(Thread):
             # Wait for timeout or to be acked
             while time.time() - start < TIMEOUT and not acked:
                 time.sleep(0.05)
-                #print('time diff : ', time.time() - start)
             
             # if not received ack
             if not acked:
