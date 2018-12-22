@@ -20,7 +20,7 @@ r1_udp_sock.bind((dest_ip_1,r1_port))
 # create and bind socket for receiving data from router2
 r2_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 r2_udp_sock.bind((dest_ip_2,r2_port))
-
+expected_seq = 0
 
 def internet_checksum(data, sum=0):
     for i in range(0,len(data),2):
@@ -49,7 +49,7 @@ class myThread(Thread): # Thread class
     
     def run(self):
         
-        expected_seq = 0
+        global expected_seq
 
         if(self.PORT == 19077):  # if port number reserved for router1
             while 1:
