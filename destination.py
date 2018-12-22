@@ -63,8 +63,8 @@ class myThread(Thread): # Thread class
 
         if(self.PORT == 19077):  # if port number reserved for router1
             while 1:
-                # receive 512 byte data from router1
-                self.data,self.addr = r1_udp_sock.recvfrom(512)
+                # receive 1000 byte data from router1
+                self.data,self.addr = r1_udp_sock.recvfrom(1000)
                 # if received data is valid
                 if self.data:
                     
@@ -85,8 +85,8 @@ class myThread(Thread): # Thread class
 
                     else:
                         # packetize ack message
-                        ack_message = packetize(expected_seq -1)
-                        r1_udp_sock.sendto(ack_message,(broker_ip_1,self.PORT))                
+                        ack_message = packetize(expected_seq - 1)
+                        r2_udp_sock.sendto(ack_message,(broker_ip_1,self.PORT))             
                    
                     # print received message
                     print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
@@ -98,8 +98,8 @@ class myThread(Thread): # Thread class
                     
         else:   #if port number reserved for router2
            while 1:
-                # receive 512 byte data from router1
-                self.data,self.addr = r2_udp_sock.recvfrom(512)
+                # receive 1000 byte data from router1
+                self.data,self.addr = r2_udp_sock.recvfrom(1000)
                 # if received data is valid
                 if self.data:
         

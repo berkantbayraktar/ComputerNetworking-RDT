@@ -49,7 +49,7 @@ f = open("./demofile_light.txt","r") # open file to be sent over the network
 seq_num = 0 # Initialize sequence number
 
 while True: # load file to the packets list
-    payload = f.read(504)
+    payload = f.read(992)
     if not payload:
         break
 
@@ -87,6 +87,7 @@ class sender(Thread):
             while next_to_send < base + WINDOW_SIZE:
                 s.send(packets[next_to_send])
                 next_to_send += 1
+                print(packets[next_to_send])
 
             start = time.time()
 
