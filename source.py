@@ -101,6 +101,10 @@ class sender(Thread):
                 WINDOW_SIZE =  min(WINDOW_SIZE, num_packets - base)
                 acked = False
 
+        # Send empty packet as sentinel
+        empty_message = b''
+        s.send(empty_message)
+
 class receiver(Thread):
     def __init__(self): 
 	    Thread.__init__(self)

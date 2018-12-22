@@ -84,11 +84,16 @@ class myThread(Thread): # Thread class
                         FILE.write(payload)
 
                     else:
-                        r1_udp_sock.sendto(str(expected_seq - 1),(broker_ip_1,self.PORT))                
+                        # packetize ack message
+                        ack_message = packetize(expected_seq -1)
+                        r1_udp_sock.sendto(ack_message,(broker_ip_1,self.PORT))                
                    
                     # print received message
                     print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
-                   
+                
+                # if end of the file
+                else:
+                    break
                  
                     
         else:   #if port number reserved for router2
@@ -100,7 +105,7 @@ class myThread(Thread): # Thread class
         
                     seq_number = unpacketize(self.data[:4])
                     checksum = unpacketize(self.data[4:8])
-                    
+
                     payload = self.data[8:]
                     flag = internet_checksum(payload,checksum)  
 
@@ -119,6 +124,10 @@ class myThread(Thread): # Thread class
                    
                     #print received message
                     print('seq_number: ',seq_number,'checksum: ',checksum, 'flag: ',flag)
+                
+                # if end of the file
+                else:
+                    break
                     
         
                     
@@ -142,3 +151,5 @@ if __name__ == '__main__':
 # Close threads
     Thread_r1.join()
     Thread_r2.join()
+# Close file
+    FILE.close()
