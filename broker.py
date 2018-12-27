@@ -30,8 +30,8 @@ if __name__ == '__main__':
     udp_socket_r2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket_r1.bind((broker_ip_1,udp1_port))
     udp_socket_r2.bind((broker_ip_2,udp2_port))
-    udp_socket_r1.settimeout(1)
-    udp_socket_r2.settimeout(1)
+    udp_socket_r1.settimeout(0.05)
+    udp_socket_r2.settimeout(0.05)
     rand = randint(0, 1)
 
     while 1 : 
