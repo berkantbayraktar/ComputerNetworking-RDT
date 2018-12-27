@@ -1,7 +1,7 @@
 #!/bin/bash
 
 directory=/home/ilker/Desktop/courses/435-network/tp-part2/ceng435-tp-part2/
-host=pc5.instageni.rnet.missouri.edu
+host=pc4.instageni.rnet.missouri.edu
 user=e2098770
 
 

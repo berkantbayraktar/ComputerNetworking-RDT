@@ -1,7 +1,7 @@
 #!/bin/bash
 
 directory=/home/berkant/Desktop/ceng435/ceng435-tp-part2/
-host=pc5.instageni.rnet.missouri.edu
+host=pc4.instageni.rnet.missouri.edu
 user=berkantb
 
 
