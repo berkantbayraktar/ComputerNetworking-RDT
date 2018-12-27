@@ -42,7 +42,7 @@ PORT = 25574  # port number
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # create socket
 s.connect((HOST,PORT)) # connect
 
-f = open("./demofile_light.txt","r") # open file to be sent over the network
+f = open("./demofile.txt","r") # open file to be sent over the network
 
 
 
