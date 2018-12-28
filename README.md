@@ -6,8 +6,6 @@ Berkant Bayraktar- 2098796
 We have 5 different python files. Namely,
 
 * destination.py
-* r1.py
-* r2.py
 * broker.py
 * source.py
 
@@ -23,22 +21,22 @@ After these commands, we enter our passphrase. Then use scp to upload files
 to remote virtual machines by :
 
 ```
-    scp -P <port-number-of-the-machine> <path-to-your-file> berkantb@pc5.instageni.rnet.missouri.edu
+    scp -P <port-number-of-the-machine> <path-to-your-file> berkantb@pc4.instageni.rnet.missouri.edu
     :/users/berkantb
 ```
 
 * path-to-your-file: directory of the file that you want to copy
-* host : target hostname {e.g. pc5.instageni.rnet.missouri.edu}
+* host : target hostname {e.g. pc4.instageni.rnet.missouri.edu}
 * user : GENI username (e.g. berkantb)
 
 After we upload our files to each machine, we connect to machines via ssh.
 
 ```
-   ssh -i <path-to-your-private-key-file> berkantb@pc5.instageni.rnet.missouri.edu
+   ssh -i <path-to-your-private-key-file> berkantb@pc4.instageni.rnet.missouri.edu
     -p <port-number-of-the-machine>
 ```
 * path-to-your-private-key-file : directory of the private key for GENI 
-* host : target hostname {e.g. pc5.instageni.rnet.missouri.edu}
+* host : target hostname {e.g. pc4.instageni.rnet.missouri.edu}
 * user : GENI username (e.g. berkantb)
 
 
@@ -58,8 +56,6 @@ You don't need to synchronize again. We already did.It is enough to
 do it once. After synchronizing,we ran our socket programs on each machine:
 ```
     python destination.py
-    python r1.py
-    python r2.py
     python broker.py
     python source.py
 ```
@@ -73,29 +69,25 @@ After finding correct internet interfaces of nodes by ```ifconfig``` command,
 
 For experiment 1:
 
-* We added 1ms+-5ms network emulating delay to the eth2 and eth1 interface 
-    for r1 and r2 links of destination node.
+* We applied 0.5% packet loss for all links between broker and destination 
 
 * For r1-destination link , run this at destination node :
 ```
-    sudo tc qdisc add dev eth2 root netem delay 1ms 5ms distribution normal
+    tc qdisc add dev eth1 root netem loss 0.5% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
 ```
+
 * For r2-destination link, run this at destination node:
 ```
-    sudo tc qdisc add dev eth1 root netem delay 1ms 5ms distribution normal
+    tc qdisc add dev eth2 root netem loss 0.5% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
 ```
- 
-
-* We added 1ms+-5ms network emulating delay to the eth1 interfaces 
-    for r1 and r2 links of broker node.
 
 * For r1-broker link, run this at r1 node :
 ```
-    sudo tc qdisc add dev eth1 root netem delay 1ms 5ms distribution normal
+    tc qdisc add dev eth1 root netem loss 0.5% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
 ```
 * For r2 link, run this at r2 node:
 ```
-    sudo tc qdisc add dev eth1 root netem delay 1ms 5ms distribution normal
+    tc qdisc add dev eth1 root netem loss 0.5% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
 For experiment 2:
