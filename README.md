@@ -67,6 +67,38 @@ in the standard output of `source` node.
 
 After finding correct internet interfaces of nodes by ```ifconfig``` command,
 
+We set routing tables of broker , routers and destinations as follows:
+
+At Broker node,
+
+```bash
+
+```
+
+```bash
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+After making routing table work ,
+
 For experiment 1:
 
 * part a)
@@ -147,20 +179,20 @@ For experiment 2:
 
 * For r1-destination link, run this at destination :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3ms reorder 0% 0%
 ```
 * For r2-destination link, run this at destination:
 ```
-    tc qdisc change dev eth2 root netem loss 0% corrupt 0.2% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth2 root netem loss 0% corrupt 0.2% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
 * For r1-broker link, run this at r1 :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3ms reorder 0% 0%
 ```
 * For r2-broker link, run this at r2 :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
 * part b)
@@ -169,20 +201,20 @@ For experiment 2:
 
 * For r1-destination link, run this at destination :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3ms reorder 0% 0%
 ```
 * For r2-destination link, run this at destination:
 ```
-    tc qdisc change dev eth2 root netem loss 0% corrupt 10% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth2 root netem loss 0% corrupt 10% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
 * For r1-broker link, run this at r1 :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3ms reorder 0% 0%
 ```
 * For r2-broker link, run this at r2 :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
 * part c)
@@ -191,21 +223,21 @@ For experiment 2:
 
 * For r1-destination link, run this at destination :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3ms reorder 0% 0%
 ```
 * For r2-destination link, run this at destination:
 ```
-    tc qdisc change dev eth2 root netem loss 0% corrupt 20% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth2 root netem loss 0% corrupt 20% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
 
 * For r1-broker link, run this at r1 :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3ms reorder 0% 0%
 ```
 * For r2-broker link, run this at r2 :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3 ms reorder 0% 0%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
 For experiment 3:
@@ -217,20 +249,20 @@ For experiment 3:
 
 * For r1-destination link, run this at destination node :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 1% 50%
 ```
 * For r2-destination link, run this at destination node:
 ```
-    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
+    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 1% 50%
 ```
 
 * For r1-broker link, run this at r1 node :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 1% 50%
 ```
 * For r2-broker link, run this at r2 node:
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 1% 50%
 ```
 
 * part b)
@@ -240,20 +272,20 @@ For experiment 3:
 
 * For r1-destination link, run this at destination node :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 10% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 10% 50%
 ```
 * For r2-destination link, run this at destination node:
 ```
-    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 10% 50%
+    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 10% 50%
 ```
 
 * For r1-broker link, run this at r1 node :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 10% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 10% 50%
 ```
 * For r2-broker link, run this at r2 node:
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 10% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 10% 50%
 ```
 
 
@@ -264,20 +296,20 @@ For experiment 3:
 
 * For r1-destination link, run this at destination node :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 35% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 35% 50%
 ```
 * For r2-destination link, run this at destination node:
 ```
-    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 35% 50%
+    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 35% 50%
 ```
 
 * For r1-broker link, run this at r1 node :
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 35% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 35% 50%
 ```
 * For r2-broker link, run this at r2 node:
 ```
-    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 35% 50%
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3ms reorder 35% 50%
 ```
 
 
