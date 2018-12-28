@@ -126,7 +126,7 @@ class receiver(Thread):
             rcv_data = s.recv(4) # receive destination reply (i.e. ACK)
             ack_number = unpacketize(rcv_data) # get ack number
             
-            if(ack_number >= base):
+            if(ack_number == base):
                 print('ack number:',ack_number)
                 base = ack_number + 1
                 acked = True
