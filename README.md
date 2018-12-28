@@ -69,7 +69,7 @@ After finding correct internet interfaces of nodes by ```ifconfig``` command,
 
 For experiment 1:
 
-* part-1 )
+* part a)
 
 * We applied 0.5% packet loss for all links between broker and destination 
 
@@ -92,7 +92,7 @@ For experiment 1:
     tc qdisc add dev eth1 root netem loss 0.5% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
-* part-2 )
+* part b)
 
 * We applied 10% packet loss for all links between broker and destination 
 
@@ -116,7 +116,7 @@ For experiment 1:
 ```
 
 
-* part-3 )
+* part c)
 
 * We applied 20% packet loss for all links between broker and destination 
 
