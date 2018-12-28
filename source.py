@@ -129,7 +129,7 @@ class receiver(Thread):
             except:
                 continue
             else:
-                if(ack_number + WINDOW_SIZE >= base):
+                if(ack_number >= base and ack_number <= base + WINDOW_SIZE):
                     print('ack number:',ack_number)
                     base = ack_number + 1
                     acked = True
