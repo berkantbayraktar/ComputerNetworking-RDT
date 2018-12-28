@@ -63,7 +63,7 @@ while True: # load file to the packets list
     seq_num +=1 # increment sequence number by one
 
 
-num_packets = len(packets)
+num_packets = len(packets) # number of packets 
 
 f.close() # after finishing reading file, close file...
 
