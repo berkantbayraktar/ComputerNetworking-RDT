@@ -283,7 +283,11 @@ For experiment 3:
 
 ___
 
-Then, for each experiment we calculated total time when transferring 5 MB file. 
+Then, for each experiment we calculated total time when transferring 5 MB file.
+
+```bash
+time source <filename>
+```
 
 
 
