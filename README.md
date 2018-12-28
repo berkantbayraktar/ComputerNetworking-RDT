@@ -3,7 +3,7 @@
 Berkant Bayraktar- 2098796
 
 
-We have 5 different python files. Namely,
+We have 3 different python files. Namely,
 
 * destination.py
 * broker.py
@@ -283,26 +283,8 @@ For experiment 3:
 
 ___
 
-Then, for each experiment we calculated average end-to-end delay for 154 packets
-for each  experiment.
+Then, for each experiment we calculated total time when transferring 5 MB file. 
 
 
 
-BROKER TERMINAL:
 
-If 10.10.3.2 go to r1:
-
-sudo route add -net 10.10.3.2 netmask 255.255.255.255 gw 10.10.2.2
-
-If 10.10.5.2 go to r2:
-
-sudo route add -net 10.10.5.2 netmask 255.255.255.255 gw 10.10.4.2
-
-DESTINATION :
-
-If 10.10.1.2 go to r1 :
-
- sudo route add -net 10.10.1.2 netmask 255.255.255.255 gw 10.10.3.1
-
-If 10.10.2.1 go to r2 :
-sudo route add -net 10.10.2.1 netmask 255.255.255.255 gw 10.10.5.1
