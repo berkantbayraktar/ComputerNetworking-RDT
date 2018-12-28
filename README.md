@@ -67,39 +67,30 @@ in the standard output of `source` node.
 
 After finding correct internet interfaces of nodes by ```ifconfig``` command,
 
-We set routing tables of broker , routers and destinations as follows:
+We set routing tables of broker and the destination nodes as follows:
 
 At Broker(b) machine,
 
-If destination is 10.10.3.2 go from the r1 link
+If destination is 10.10.3.2(destination node) go from the r1 link
 ```bash
 route add -net 10.10.3.2 netmask 255.255.255.255 gw 10.10.2.2 dev eth3
 ```
-If destination is 10.10.5.2 go from the r2 link
+If destination is 10.10.5.2(destination node) go from the r2 link
 ```bash
 route add -net 10.10.5.2 netmask 255.255.255.255 gw 10.10.4.2 dev eth1
 ```
 
-At r1 machine ,
+At Destination (d) machine ,
+If destination is 10.10.1.2(broker node) go from the r1 link
 ```bash
-
+route add -net 10.10.1.2 netmask 255.255.255.255 gw 10.10.3.1 dev eth1
 ```
 
+If destination is 10.10.2.1(broker node) go from the r2 link
 ```bash
-
+route add -net 10.10.2.1 netmask 255.255.255.255 gw 10.10.5.1 dev eth2
 ```
 
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
 After making routing table work ,
 
 For experiment 1:
