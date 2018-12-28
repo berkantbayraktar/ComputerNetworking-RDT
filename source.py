@@ -124,18 +124,21 @@ class receiver(Thread):
 
         while True:
             rcv_data = s.recv(4) # receive destination reply (i.e. ACK)
-            ack_number = unpacketize(rcv_data) # get ack number
-            
-            if(ack_number + WINDOW_SIZE >= base):
-                print('ack number:',ack_number)
-                base = ack_number + 1
-                acked = True
-            
-            # If receive the last ack close thread
-            if(ack_number == num_packets-1):
-                print("Last ack message received:",num_packets-1)
-                print("Closing receiver Thread")
-                break
+            try:
+                ack_number = unpacketize(rcv_data) # get ack number
+            except:
+                continue
+            else:
+                if(ack_number + WINDOW_SIZE >= base):
+                    print('ack number:',ack_number)
+                    base = ack_number + 1
+                    acked = True
+                
+                # If receive the last ack close thread
+                if(ack_number == num_packets-1):
+                    print("Last ack message received:",num_packets-1)
+                    print("Closing receiver Thread")
+                    break
 
 
 if __name__ == '__main__': 
