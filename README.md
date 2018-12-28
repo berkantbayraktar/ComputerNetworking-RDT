@@ -69,6 +69,8 @@ After finding correct internet interfaces of nodes by ```ifconfig``` command,
 
 For experiment 1:
 
+* part-1 )
+
 * We applied 0.5% packet loss for all links between broker and destination 
 
 * For r1-destination link , run this at destination node :
@@ -90,58 +92,145 @@ For experiment 1:
     tc qdisc add dev eth1 root netem loss 0.5% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
 ```
 
+* part-2 )
+
+* We applied 10% packet loss for all links between broker and destination 
+
+* For r1-destination link , run this at destination node :
+```
+    tc qdisc add dev eth1 root netem loss 10% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
+```
+
+* For r2-destination link, run this at destination node:
+```
+    tc qdisc add dev eth2 root netem loss 10% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
+```
+
+* For r1-broker link, run this at r1 node :
+```
+    tc qdisc add dev eth1 root netem loss 10% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
+```
+* For r2 link, run this at r2 node:
+```
+    tc qdisc add dev eth1 root netem loss 10% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
+```
+
+
+* part-3 )
+
+* We applied 20% packet loss for all links between broker and destination 
+
+* For r1-destination link , run this at destination node :
+```
+    tc qdisc add dev eth1 root netem loss 20% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
+```
+
+* For r2-destination link, run this at destination node:
+```
+    tc qdisc add dev eth2 root netem loss 20% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
+```
+
+* For r1-broker link, run this at r1 node :
+```
+    tc qdisc add dev eth1 root netem loss 20% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
+```
+* For r2 link, run this at r2 node:
+```
+    tc qdisc add dev eth1 root netem loss 20% corrupt 0% duplicate 0% delay 3ms reorder 0% 0%
+```
+
 For experiment 2:
 
-* We changed to 20ms+-5ms network emulating delay to the eth2 and eth1 interface 
-    for r1 and r2 links of destination node.
+* part a)
+
+* We applied 0.2% packet corruption for all links between broker and destination
 
 * For r1-destination link, run this at destination :
 ```
-    sudo tc qdisc change dev eth2 root netem delay 20ms 5ms distribution normal
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3 ms reorder 0% 0%
 ```
 * For r2-destination link, run this at destination:
 ```
-    sudo tc qdisc change dev eth1 root netem delay 20ms 5ms distribution normal
+    tc qdisc change dev eth2 root netem loss 0% corrupt 0.2% duplicate 0% delay 3 ms reorder 0% 0%
 ```
- 
-
-* We changed to 20ms+-5ms network emulating delay to the eth1 interfaces
-    for r1 and r2 links of broker node.
 
 * For r1-broker link, run this at r1 :
 ```
-    sudo tc qdisc change dev eth1 root netem delay 20ms 5ms distribution normal
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3 ms reorder 0% 0%
 ```
 * For r2-broker link, run this at r2 :
 ```
-    sudo tc qdisc change dev eth1 root netem delay 20ms 5ms distribution normal
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0.2% duplicate 0% delay 3 ms reorder 0% 0%
+```
+
+* part b)
+
+* We applied 10% packet corruption for all links between broker and destination
+
+* For r1-destination link, run this at destination :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3 ms reorder 0% 0%
+```
+* For r2-destination link, run this at destination:
+```
+    tc qdisc change dev eth2 root netem loss 0% corrupt 10% duplicate 0% delay 3 ms reorder 0% 0%
+```
+
+* For r1-broker link, run this at r1 :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3 ms reorder 0% 0%
+```
+* For r2-broker link, run this at r2 :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 10% duplicate 0% delay 3 ms reorder 0% 0%
+```
+
+* part c)
+
+* We applied 20% packet corruption for all links between broker and destination
+
+* For r1-destination link, run this at destination :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3 ms reorder 0% 0%
+```
+* For r2-destination link, run this at destination:
+```
+    tc qdisc change dev eth2 root netem loss 0% corrupt 20% duplicate 0% delay 3 ms reorder 0% 0%
+```
+
+
+* For r1-broker link, run this at r1 :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3 ms reorder 0% 0%
+```
+* For r2-broker link, run this at r2 :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 20% duplicate 0% delay 3 ms reorder 0% 0%
 ```
 
 For experiment 3:
 
-* We changed to 60ms+-5ms network emulating delay to the eth0 and eth1 interface 
-    for r1 and r2 links of destination node.
+* part a)
+
+* We applied 1% reorder of packets for all links between broker and destination
+
 
 * For r1-destination link, run this at destination node :
 ```
-    sudo tc qdisc change dev eth2 root netem delay 60ms 5ms distribution normal
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
 ```
 * For r2-destination link, run this at destination node:
 ```
-    sudo tc qdisc change dev eth1 root netem delay 60ms 5ms distribution normal
+    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
 ```
- 
-
-* We changed to 60ms+-5ms network emulating delay to the eth0 and eth1 interface 
-    for r1 and r2 links of broker node.
 
 * For r1-broker link, run this at r1 node :
 ```
-    sudo tc qdisc change dev eth1 root netem delay 60ms 5ms distribution normal
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
 ```
 * For r2-broker link, run this at r2 node:
 ```
-    sudo tc qdisc change dev eth1 root netem delay 60ms 5ms distribution normal
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
 ```
 ___
 
