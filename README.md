@@ -232,6 +232,55 @@ For experiment 3:
 ```
     tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 1% 50%
 ```
+
+* part b)
+
+* We applied 10% reorder of packets for all links between broker and destination
+
+
+* For r1-destination link, run this at destination node :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 10% 50%
+```
+* For r2-destination link, run this at destination node:
+```
+    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 10% 50%
+```
+
+* For r1-broker link, run this at r1 node :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 10% 50%
+```
+* For r2-broker link, run this at r2 node:
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 10% 50%
+```
+
+
+* part a)
+
+* We applied 35% reorder of packets for all links between broker and destination
+
+
+* For r1-destination link, run this at destination node :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 35% 50%
+```
+* For r2-destination link, run this at destination node:
+```
+    tc qdisc change dev eth2 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 35% 50%
+```
+
+* For r1-broker link, run this at r1 node :
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 35% 50%
+```
+* For r2-broker link, run this at r2 node:
+```
+    tc qdisc change dev eth1 root netem loss 0% corrupt 0% duplicate 0% delay 3 ms reorder 35% 50%
+```
+
+
 ___
 
 Then, for each experiment we calculated average end-to-end delay for 154 packets
