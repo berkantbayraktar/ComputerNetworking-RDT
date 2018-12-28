@@ -68,30 +68,30 @@ num_packets = len(packets)
 f.close() # after finishing reading file, close file...
 
 
-acked = False
-base = 0
-next_to_send = 0
-WINDOW_SIZE = 4
+acked = False # flag
+base = 0 # set base 
+next_to_send = 0 # sequence number of the next message
+WINDOW_SIZE = 4 #set windows size
 
 class sender(Thread):
     def __init__(self): 
 	    Thread.__init__(self)
         
     def run(self):
-        global base,acked,WINDOW_SIZE,next_to_send
+        global base,acked,WINDOW_SIZE,next_to_send # make these variables global
 
-        TIMEOUT = WINDOW_SIZE / 4
+        TIMEOUT = WINDOW_SIZE / 4 #set timeout variable
         
         
-        while base < num_packets:
+        while base < num_packets: #main loop
 
-            while next_to_send < base + WINDOW_SIZE:
+            while next_to_send < base + WINDOW_SIZE: 
                 try:
-                    s.send(packets[next_to_send])
+                    s.send(packets[next_to_send]) # send messages to broker
                 except IndexError:
                     break
                 else:
-                    next_to_send += 1
+                    next_to_send += 1 # increment 
                 
 
             start = time.time()
@@ -104,12 +104,12 @@ class sender(Thread):
             if not acked:
                 next_to_send = base
             else:
-                WINDOW_SIZE =  min(WINDOW_SIZE, num_packets - base)
-                acked = False
+                WINDOW_SIZE =  min(WINDOW_SIZE, num_packets - base) # configuration for last 4(WINDOW SIZE) messages
+                acked = False # make acked flag false
 
-        # Send seq_number = -1 as terminator
-        final_message = packetize(-1)
-        s.send(final_message)
+        
+        final_message = packetize(-1) # Send seq_number = -1 as terminator
+        s.send(final_message) # send message to broker
         base = num_packets
         print("Closing sender Thread")
 
@@ -131,7 +131,7 @@ class receiver(Thread):
                 base = ack_number + 1
                 acked = True
             
-            # If receive the last ack
+            # If receive the last ack close thread
             if(ack_number >= num_packets-1):
                 print("Last ack message received:",num_packets-1)
                 print("Closing receiver Thread")
@@ -142,20 +142,18 @@ if __name__ == '__main__':
 
     # create thread for sending
     src_snd_thread = sender()
-    
     # create thread for receiving
     src_rcv_thread = receiver()
 
-# Start running the threads
-	
+    # Start running the threads	
     src_snd_thread.start()
     src_rcv_thread.start()
 
-# Close threads
+    # Close threads
     src_snd_thread.join()
     src_rcv_thread.join()
 
-# close tcp socket
+    # close tcp socket
     s.close()
 
 
