@@ -63,10 +63,8 @@ in given order:
     python source.py <filename>
 ```
 
-In our `source.py`, we take input from our predefined file. It automatically,
-parses file into chunks and send them one by one. You can find end-to-end delay
-of each packets and average end-to-end delay of these packets, 
-in the standard output of `source` node.
+In our `source.py`, we take file as argument to program. It automatically,
+parses file into chunks and send them one by one.
 
 After finding correct internet interfaces of nodes by ```ifconfig``` command,
 
