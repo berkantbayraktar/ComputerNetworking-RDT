@@ -57,7 +57,7 @@ do it once. After synchronizing,we ran our socket programs on each machine:
 ```
     python destination.py
     python broker.py
-    python source.py
+    python source.py <filename>
 ```
 
 In our `source.py`, we take input from our predefined file. It automatically,
@@ -312,7 +312,7 @@ ___
 Then, for each experiment we calculated total time when transferring 5 MB file.
 
 ```bash
-time source <filename>
+time python source.py <filename>
 ```
 
 
