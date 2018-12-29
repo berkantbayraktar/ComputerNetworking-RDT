@@ -52,8 +52,11 @@ We checked if it is syncronized or not by :
 ```
 timedatectl status
 ```
-You don't need to synchronize again. We already did.It is enough to
-do it once. After synchronizing,we ran our socket programs on each machine:
+You don't need to synchronize again. We already did. It is enough to
+do it once.
+
+After synchronizing, we ran our socket programs on each machine
+in given order:
 ```
     python destination.py
     python broker.py
