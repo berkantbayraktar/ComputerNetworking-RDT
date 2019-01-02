@@ -35,20 +35,20 @@ isRunning = True # flag to able to understand transferring of file is finished o
 b1_udp_sock.settimeout(3) # set timeout
 b2_udp_sock.settimeout(3) # set timeout
 
-def internet_checksum(data, sum=0):
-    for i in range(0,len(data),2):
-        if i + 1 >= len(data):
-            sum += ord(data[i]) & 0xFF
+def internet_checksum(payload, checksum=0):
+    for i in range(0,len(payload),2):
+        if i + 1 >= len(payload):
+            checksum += ord(payload[i]) & 0xFF
         else:
-            w = ((ord(data[i]) << 8) & 0xFF00) + (ord(data[i+1]) & 0xFF)
-            sum += w
+            k = ((ord(payload[i]) << 8) & 0xFF00) + (ord(payload[i+1]) & 0xFF)
+            checksum += k
 
-    while (sum >> 16) > 0:
-        sum = (sum & 0xFFFF) + (sum >> 16)
+    while (checksum >> 16) > 0:
+        checksum = (checksum & 0xFFFF) + (checksum >> 16)
 
-    sum = ~sum
+    checksum = ~checksum
 
-    return sum & 0xFFFF
+    return checksum & 0xFFFF
 
 
 

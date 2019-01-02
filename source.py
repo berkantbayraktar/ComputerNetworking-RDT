@@ -15,26 +15,7 @@ def packetize(num):
 def unpacketize(packet):
     return struct.unpack("<i",packet)[0]
 
-def internet_checksum(data, sum=0):
-    for i in range(0,len(data),2):
-        if i + 1 >= len(data):
-            sum += ord(data[i]) & 0xFF
-        else:
-            w = ((ord(data[i]) << 8) & 0xFF00) + (ord(data[i+1]) & 0xFF)
-            sum += w
-
-    while (sum >> 16) > 0:
-        sum = (sum & 0xFFFF) + (sum >> 16)
-
-    sum = ~sum
-
-    return sum & 0xFFFF
-
-
-
 packets = []
-
-
 
 HOST = '10.10.1.2' # broker ip
 PORT = 25574  # port number 
@@ -48,6 +29,21 @@ f = open(FILE,"r") # open file to be sent over the network
 
 
 seq_num = 0 # Initialize sequence number
+
+def internet_checksum(payload, checksum=0):
+    for i in range(0,len(payload),2):
+        if i + 1 >= len(payload):
+            checksum += ord(payload[i]) & 0xFF
+        else:
+            k = ((ord(payload[i]) << 8) & 0xFF00) + (ord(payload[i+1]) & 0xFF)
+            checksum += k
+
+    while (checksum >> 16) > 0:
+        checksum = (checksum & 0xFFFF) + (checksum >> 16)
+
+    checksum = ~checksum
+
+    return checksum & 0xFFFF
 
 while True: # load file to the packets list
     payload = f.read(504)
