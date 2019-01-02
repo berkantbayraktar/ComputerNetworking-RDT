@@ -286,7 +286,7 @@ For experiment 3:
 ```
 
 
-* part a)
+* part c)
 
 * We applied 35% reorder of packets for all links between broker and destination
 
